@@ -13,7 +13,7 @@ public class Tenant {
 
     private UUID id;
     private String name;
-    private String bussinessName;
+    private String businessName;
     private String plan;
     private String status;
 

@@ -20,5 +20,9 @@ public class Client {
     private String phone;
     private String status;
     private LocalDateTime createdAt;
+    
+    public static Client create(Tenant tenant, String fullName, String document, String email, String phone){
+        return new Client(null, tenant, fullName, document, email, phone, "ACTIVE", LocalDateTime.now());
+    }
 
 }

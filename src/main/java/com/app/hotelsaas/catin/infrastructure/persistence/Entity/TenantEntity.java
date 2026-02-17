@@ -11,14 +11,14 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tenants")
+@Table(name = "tenant")
 public class TenantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    private String bussinessName;
+    private String businessName;
     private String plan;
     private String status;
 
