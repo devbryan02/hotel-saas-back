@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CreateClienteUseCase {
+public class CreateClientUseCase {
 
     private final ClientRepository clientRepository;
     private final TenantRepository tenantRepository;
@@ -26,12 +26,16 @@ public class CreateClienteUseCase {
      * Executes transactional client creation; persists and returns result
      */
     @Transactional
-    public Client execute(CreateClientRequest request){
+    public Client execute(UUID tenantId, CreateClientRequest request){
 
-        Tenant tenant = tenantRepository.findById(UUID.fromString(request.tenantId()))
-                .orElseThrow(() -> new TenantNotFoundException("Tenant not found"));
+        Tenant tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(() -> {
+                    log.warn("Tenant not found whith tenantId: {}", tenantId);
+                    return new TenantNotFoundException("Tenant not found");
+                });
 
-        if(clientRepository.existsByDocumentAndTenantId(request.document(), tenant.getId())){
+        if(clientRepository.existsByDocumentAndTenantId(request.document(), tenantId)){
+            log.warn("Client with document {} already exists", request.document());
             throw new DuplicateClientException("Client with document "+request.document()+" already exists");
         }
 

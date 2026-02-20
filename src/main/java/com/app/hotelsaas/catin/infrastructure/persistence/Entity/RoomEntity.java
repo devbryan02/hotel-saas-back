@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -24,6 +25,6 @@ public class RoomEntity {
 
     private String roomNumber;
     private String roomType;
-    private Double pricePerNight;
+    private BigDecimal pricePerNight;
     private String status;
 }

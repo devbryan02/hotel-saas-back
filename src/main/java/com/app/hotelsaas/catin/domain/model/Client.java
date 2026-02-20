@@ -25,4 +25,8 @@ public class Client {
         return new Client(null, tenant, fullName, document, email, phone, "ACTIVE", LocalDateTime.now());
     }
 
+    public Client update(String fullName, String email, String phone){
+        return new Client(this.id, this.tenant, fullName, this.document, email, phone, this.status, this.createdAt);
+    }
+
 }

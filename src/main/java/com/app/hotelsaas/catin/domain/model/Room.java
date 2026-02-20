@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -15,7 +16,11 @@ public class Room {
     private Tenant tenant;
     private String roomNumber;
     private String roomType;
-    private Double pricePerNight;
+    private BigDecimal PricePerNight;
     private String status;
+
+    public static Room create(Tenant tenant, String roomNumber, String roomType, BigDecimal pricePerNight){
+        return new Room(null, tenant, roomNumber, roomType, pricePerNight, "AVAILABLE");
+    }
 
 }

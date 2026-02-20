@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -27,6 +28,8 @@ public class GlobalHandlerException {
                 ex.getClass().getSimpleName().replace("Exception", ""),
                 request.getRequestURI()
         );
+
+        log.error("Business exception occurred: {}", ex.getMessage(), ex);
 
         return ResponseEntity.status(ex.getHttpStatus()).body(apiErrorResponse);
     }
@@ -52,6 +55,27 @@ public class GlobalHandlerException {
                 "Bad Request",
                 request.getRequestURI(),
                 fieldErrors));
+    }
+
+    /**
+     * Handles missing parameter exceptions; returns error response
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiErrorResponse> handleMissingParam(
+            MissingServletRequestParameterException ex,
+            HttpServletRequest request) {
+
+        String message = ex.getParameterName() + " is required";
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                message,
+                HttpStatus.BAD_REQUEST.value(),
+                "MissingRequiredParameter",
+                request.getRequestURI()
+        );
+
+        log.warn("Missing parameter: {}", message, ex);
+        return ResponseEntity.badRequest().body(response);
     }
 
     /**

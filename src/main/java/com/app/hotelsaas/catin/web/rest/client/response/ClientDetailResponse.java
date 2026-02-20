@@ -3,10 +3,8 @@ package com.app.hotelsaas.catin.web.rest.client.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
-public record ClientResponse(
+public record ClientDetailResponse(
         String id,
-        String tenantId,
-        String tenantName,
         String fullName,
         String document,
         String email,
@@ -14,4 +12,4 @@ public record ClientResponse(
         String status,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt
-) { }
+) {}

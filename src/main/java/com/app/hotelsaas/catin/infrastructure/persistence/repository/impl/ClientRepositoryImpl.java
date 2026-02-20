@@ -7,6 +7,8 @@ import com.app.hotelsaas.catin.infrastructure.persistence.repository.jpa.ClientJ
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -27,7 +29,17 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public boolean existsByDocumentAndTenantId(String document, UUID tenantId) {
+    public Optional<Client> findByIdAndTenantId(UUID id, UUID tenantId) {
+        return jpa.findByIdAndTenantId(id, tenantId).map(mapper::toDomain);
+    }
+
+    @Override
+    public List<Client> findAllByTenantId(UUID tenantId) {
+        return jpa.findAllByTenantId(tenantId).stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public Boolean existsByDocumentAndTenantId(String document, UUID tenantId) {
         return jpa.existsByDocumentAndTenantId(document, tenantId);
     }
 }
