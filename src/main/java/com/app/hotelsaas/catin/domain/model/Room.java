@@ -23,4 +23,8 @@ public class Room {
         return new Room(null, tenant, roomNumber, roomType, pricePerNight, "AVAILABLE");
     }
 
+    public Room update(String roomNumber, String roomType, BigDecimal pricePerNight, String status){
+        return new Room(this.id, this.tenant, roomNumber, roomType, pricePerNight, status);
+    }
+
 }
