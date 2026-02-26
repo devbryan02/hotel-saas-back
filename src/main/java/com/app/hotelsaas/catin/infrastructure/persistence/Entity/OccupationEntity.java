@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "occupation")
-public class OcupationEntity {
+public class OccupationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,6 +36,7 @@ public class OcupationEntity {
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private String status;
+    private BigDecimal totalPrice;
     private LocalDateTime createdAt;
 
 }

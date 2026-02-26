@@ -16,15 +16,18 @@ public class Room {
     private Tenant tenant;
     private String roomNumber;
     private String roomType;
-    private BigDecimal PricePerNight;
+    private BigDecimal pricePerNight;
     private String status;
 
-    public static Room create(Tenant tenant, String roomNumber, String roomType, BigDecimal pricePerNight){
+    public static Room create(Tenant tenant, String roomNumber, String roomType, BigDecimal pricePerNight) {
         return new Room(null, tenant, roomNumber, roomType, pricePerNight, "AVAILABLE");
     }
 
-    public Room update(String roomNumber, String roomType, BigDecimal pricePerNight, String status){
+    public Room update(String roomNumber, String roomType, BigDecimal pricePerNight, String status) {
         return new Room(this.id, this.tenant, roomNumber, roomType, pricePerNight, status);
     }
 
+    public Room occupy() {
+        return new Room(this.id, this.tenant, this.roomNumber, this.roomType, this.pricePerNight, "OCCUPIED");
+    }
 }

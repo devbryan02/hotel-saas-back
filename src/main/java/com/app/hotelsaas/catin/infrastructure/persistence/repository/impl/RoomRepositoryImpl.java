@@ -32,8 +32,8 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public Boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenanId) {
-        return jpa.existsByRoomNumberAndTenantId(roomNumber, tenanId);
+    public Boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId) {
+        return jpa.existsByRoomNumberAndTenantId(roomNumber, tenantId);
     }
 
     @Override
