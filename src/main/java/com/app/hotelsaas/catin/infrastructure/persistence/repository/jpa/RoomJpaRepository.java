@@ -8,7 +8,9 @@ import java.util.UUID;
 
 public interface RoomJpaRepository extends JpaRepository<RoomEntity, UUID> {
 
-    boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId);
+    // RoomRepository port
+    Boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId);
+    Boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId);
     Optional<RoomEntity> findByIdAndTenantId(UUID id, UUID tenantId);
 
 }

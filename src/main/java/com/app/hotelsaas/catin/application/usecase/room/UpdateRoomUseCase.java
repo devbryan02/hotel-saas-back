@@ -28,7 +28,7 @@ public class UpdateRoomUseCase {
                     return new RoomNotFoundException("Room not found or not associated with tenant");
                 });
 
-        if(roomRepository.existsByRoomNumberAndTenantId(request.roomNumber(), tenantId)){
+        if(roomRepository.existsByRoomNumberAndTenantIdAndIdNot(request.roomNumber(), tenantId, roomId)){
             log.warn("Room with roomNumber {} already exists", request.roomNumber());
             throw new DuplicateRoomException("Room with roomNumber "+request.roomNumber()+" already exists");
         }

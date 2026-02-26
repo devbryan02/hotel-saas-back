@@ -9,6 +9,7 @@ public interface RoomRepository {
 
     Room save(Room room);
     Optional<Room> findByIdAndTenantId(UUID id, UUID tenantId);
-    Boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId);
+    Boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenanId);
+    Boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId);
 
 }
