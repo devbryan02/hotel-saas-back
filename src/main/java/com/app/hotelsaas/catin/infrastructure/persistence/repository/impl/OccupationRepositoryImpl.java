@@ -22,4 +22,3 @@ public class OccupationRepositoryImpl implements OccupationRepository {
         return mapper.toDomain(jpa.save(entity));
     }
 }
- 

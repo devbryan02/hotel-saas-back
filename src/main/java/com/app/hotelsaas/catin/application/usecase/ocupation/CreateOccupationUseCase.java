@@ -32,6 +32,7 @@ public class CreateOccupationUseCase {
     public Occupation execute(UUID tenantId, UUID roomId, UUID clientId, CreateOccupationRequest request) {
 
         if (!request.checkOutDate().isAfter(request.checkInDate())) {
+            log.warn("Check-out date must be after check-in date");
             throw new InvalidOccupationDatesException("Check-out date must be after check-in date");
         }
 
@@ -40,6 +41,7 @@ public class CreateOccupationUseCase {
         Client client = entityFinder.findClient(clientId, tenantId);
 
         if (!"AVAILABLE".equals(room.getStatus())) {
+            log.warn("Room is not available. Current status: {}", room.getStatus());
             throw new RoomNotAvailableException("Room is not available. Current status: " + room.getStatus());
         }
 
