@@ -48,11 +48,11 @@ public class CreateOccupationUseCase {
         long days = ChronoUnit.DAYS.between(request.checkInDate(), request.checkOutDate());
         BigDecimal totalPrice = room.getPricePerNight().multiply(BigDecimal.valueOf(days));
 
-        Room occuipedRoom  = room.occupy();
-        roomRepository.save(occuipedRoom);
+        Room occupiedRoom  = room.occupy();
+        roomRepository.save(occupiedRoom);
 
         Occupation occupation = Occupation.create(
-                tenant, client, occuipedRoom,
+                tenant, client, occupiedRoom,
                 request.checkInDate(),
                 request.checkOutDate(),
                 totalPrice

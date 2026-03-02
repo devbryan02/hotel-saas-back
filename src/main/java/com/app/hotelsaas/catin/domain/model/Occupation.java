@@ -28,4 +28,8 @@ public class Occupation {
         return new Occupation(null, tenant, client, room, checkInDate, checkOutDate, "ACTIVE", totalPrice, LocalDateTime.now());
     }
 
+    public Occupation checkOut() {
+        return new Occupation(this.id, this.tenant, this.client, this.room, this.checkInDate, this.checkOutDate, "FINISHED", this.totalPrice, this.createdAt);
+    }
+
 }

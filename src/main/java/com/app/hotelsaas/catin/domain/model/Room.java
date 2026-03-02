@@ -30,4 +30,8 @@ public class Room {
     public Room occupy() {
         return new Room(this.id, this.tenant, this.roomNumber, this.roomType, this.pricePerNight, "OCCUPIED");
     }
+
+    public Room release() {
+        return new Room(this.id, this.tenant, this.roomNumber, this.roomType, this.pricePerNight, "AVAILABLE");
+    }
 }

@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.application.usecase.client;
 
+import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
 import com.app.hotelsaas.catin.domain.exception.DuplicateClientException;
 import com.app.hotelsaas.catin.domain.exception.TenantNotFoundException;
 import com.app.hotelsaas.catin.domain.model.Client;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class CreateClientUseCase {
 
     private final ClientRepository clientRepository;
-    private final TenantRepository tenantRepository;
+    private final EntityFinder entityFinder;
 
     /**
      * Executes transactional client creation; persists and returns result
@@ -28,11 +29,7 @@ public class CreateClientUseCase {
     @Transactional
     public Client execute(UUID tenantId, CreateClientRequest request){
 
-        Tenant tenant = tenantRepository.findById(tenantId)
-                .orElseThrow(() -> {
-                    log.warn("Tenant not found whith tenantId: {}", tenantId);
-                    return new TenantNotFoundException("Tenant not found");
-                });
+        Tenant tenant = entityFinder.findTenant(tenantId);
 
         if(clientRepository.existsByDocumentAndTenantId(request.document(), tenantId)){
             log.warn("Client with document {} already exists", request.document());

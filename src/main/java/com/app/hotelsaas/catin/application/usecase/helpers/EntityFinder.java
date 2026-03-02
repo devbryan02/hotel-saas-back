@@ -1,12 +1,15 @@
 package com.app.hotelsaas.catin.application.usecase.helpers;
 
 import com.app.hotelsaas.catin.domain.exception.ClientNotFoundException;
+import com.app.hotelsaas.catin.domain.exception.OccupationNotFoundException;
 import com.app.hotelsaas.catin.domain.exception.RoomNotFoundException;
 import com.app.hotelsaas.catin.domain.exception.TenantNotFoundException;
 import com.app.hotelsaas.catin.domain.model.Client;
+import com.app.hotelsaas.catin.domain.model.Occupation;
 import com.app.hotelsaas.catin.domain.model.Room;
 import com.app.hotelsaas.catin.domain.model.Tenant;
 import com.app.hotelsaas.catin.domain.port.ClientRepository;
+import com.app.hotelsaas.catin.domain.port.OccupationRepository;
 import com.app.hotelsaas.catin.domain.port.RoomRepository;
 import com.app.hotelsaas.catin.domain.port.TenantRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,7 @@ public class EntityFinder {
     private final TenantRepository tenantRepository;
     private final RoomRepository roomRepository;
     private final ClientRepository clientRepository;
+    private final OccupationRepository occupationRepository;
 
     public Tenant findTenant(UUID tenantId) {
         return tenantRepository.findById(tenantId)
@@ -45,6 +49,14 @@ public class EntityFinder {
                 .orElseThrow(() -> {
                     log.warn("Client {} not found for tenant {}", clientId, tenantId);
                     return new ClientNotFoundException("Client not found or not associated with tenant");
+                });
+    }
+
+    public Occupation findOccupation(UUID occupationId, UUID tenantId){
+        return occupationRepository.findByIdAndTenantId(occupationId, tenantId)
+                .orElseThrow(() -> {
+                    log.warn("Occupation {} not found for tenant {}", occupationId, tenantId);
+                    return new OccupationNotFoundException("Occupation not found or not associated with tenant");
                 });
     }
 }

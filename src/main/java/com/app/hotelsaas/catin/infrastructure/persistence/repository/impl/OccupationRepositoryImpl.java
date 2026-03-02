@@ -7,6 +7,10 @@ import com.app.hotelsaas.catin.infrastructure.persistence.repository.jpa.Occupat
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Repository
 @RequiredArgsConstructor
 public class OccupationRepositoryImpl implements OccupationRepository {
@@ -21,4 +25,15 @@ public class OccupationRepositoryImpl implements OccupationRepository {
                 : mapper.toEntity(occupation);
         return mapper.toDomain(jpa.save(entity));
     }
+
+    @Override
+    public List<Occupation> findAllByTenantId(UUID tenantId) {
+        return jpa.findAllByTenantId(tenantId).stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public Optional<Occupation> findByIdAndTenantId(UUID id, UUID tenantId) {
+        return jpa.findByIdAndTenantId(id, tenantId).map(mapper::toDomain);
+    }
+
 }
