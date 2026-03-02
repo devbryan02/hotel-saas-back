@@ -7,6 +7,8 @@ import com.app.hotelsaas.catin.infrastructure.persistence.repository.jpa.AppUser
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class AppUserRepositoryImpl implements AppUserRepository {
@@ -17,5 +19,10 @@ public class AppUserRepositoryImpl implements AppUserRepository {
     @Override
     public AppUser save(AppUser appUser) {
         return mapper.toDomain(jpa.save(mapper.toEntity(appUser)));
+    }
+
+    @Override
+    public Optional<AppUser> findByEmail(String email) {
+        return jpa.findByEmail(email).map(mapper::toDomain);
     }
 }

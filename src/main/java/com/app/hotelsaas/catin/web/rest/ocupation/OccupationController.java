@@ -46,6 +46,15 @@ public class OccupationController {
         return ResponseEntity.ok(mapper.toListItemResponses(occupations));
     }
 
+    @GetMapping("/{occupationId}")
+    public ResponseEntity<OccupationDetailResponse> findById(
+            @PathVariable UUID occupationId,
+            @PathVariable UUID tenantId
+    ){
+        Occupation occupation = getOccupationUseCase.findByIdAndTenantId(occupationId, tenantId);
+        return ResponseEntity.ok(mapper.toDetailResponse(occupation));
+    }
+
     @PostMapping("/{occupationId}/check-out")
     public ResponseEntity<OccupationDetailResponse> checkOut(
             @PathVariable UUID occupationId,

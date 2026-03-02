@@ -11,5 +11,6 @@ public interface OccupationRepository {
     Occupation save(Occupation occupation);
     List<Occupation> findAllByTenantId(UUID tenantId);
     Optional<Occupation> findByIdAndTenantId(UUID id, UUID tenantId);
+    List<Occupation> findActiveByTenantId(UUID tenantId);
 
 }

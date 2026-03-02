@@ -7,6 +7,7 @@ import com.app.hotelsaas.catin.infrastructure.persistence.repository.jpa.RoomJpa
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +30,11 @@ public class RoomRepositoryImpl implements RoomRepository {
     public Optional<Room> findByIdAndTenantId(UUID id, UUID tenantId) {
         return jpa.findByIdAndTenantId(id, tenantId)
                 .map(mapper::toDomain);
+    }
+
+    @Override
+    public List<Room> findAllByTenantId(UUID tenantId) {
+        return jpa.findAllByTenantId(tenantId).stream().map(mapper::toDomain).toList();
     }
 
     @Override

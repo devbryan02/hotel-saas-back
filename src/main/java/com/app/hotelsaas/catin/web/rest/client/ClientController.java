@@ -48,6 +48,15 @@ public class ClientController {
        return ResponseEntity.ok(mapper.toListItemResponses(clients));
     }
 
+    @GetMapping("/{clientId}")
+    public ResponseEntity<ClientDetailResponse> findById(
+            @PathVariable UUID clientId,
+            @PathVariable UUID tenantId
+    ) {
+        Client client = getClientUseCase.findByIdAndTenantId(clientId, tenantId);
+        return ResponseEntity.ok(mapper.toDetailResponse(client));
+    }
+
     @PutMapping("/{clientId}")
     public ResponseEntity<ClientDetailResponse> update(
             @PathVariable UUID tenantId,

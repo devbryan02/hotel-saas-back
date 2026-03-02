@@ -2,16 +2,14 @@ package com.app.hotelsaas.catin.application.usecase.client;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
 import com.app.hotelsaas.catin.domain.exception.DuplicateClientException;
-import com.app.hotelsaas.catin.domain.exception.TenantNotFoundException;
 import com.app.hotelsaas.catin.domain.model.Client;
 import com.app.hotelsaas.catin.domain.model.Tenant;
 import com.app.hotelsaas.catin.domain.port.ClientRepository;
-import com.app.hotelsaas.catin.domain.port.TenantRepository;
 import com.app.hotelsaas.catin.web.rest.client.request.CreateClientRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 

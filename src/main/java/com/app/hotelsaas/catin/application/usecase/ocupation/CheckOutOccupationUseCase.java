@@ -6,10 +6,10 @@ import com.app.hotelsaas.catin.domain.model.Occupation;
 import com.app.hotelsaas.catin.domain.model.Room;
 import com.app.hotelsaas.catin.domain.port.OccupationRepository;
 import com.app.hotelsaas.catin.domain.port.RoomRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -37,7 +37,8 @@ public class CheckOutOccupationUseCase {
         occupationRepository.save(finished);
 
         // ROOM: OCCUPIED -> AVAILABLE
-        Room releaseRoom = occupation.getRoom().release();
+        Room roomCurrent = entityFinder.findRoom(occupation.getRoom().getId(), tenantId);
+        Room releaseRoom = roomCurrent.release();
         roomRepository.save(releaseRoom);
 
         return finished;
