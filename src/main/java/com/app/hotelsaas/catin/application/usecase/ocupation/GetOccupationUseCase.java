@@ -23,7 +23,7 @@ public class GetOccupationUseCase {
         return occupationRepository.findAllByTenantId(tenantId);
     }
 
-    public Occupation findByIdAndTenantId(UUID id, UUID tenantId){
+    public Occupation findByTenantIdAndId(UUID id, UUID tenantId){
         return entityFinder.findOccupation(id, tenantId);
     }
 

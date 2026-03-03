@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface ClientJpaRepository extends JpaRepository<ClientEntity, UUID> {
 
-    Boolean existsByDocumentAndTenantId(String document, UUID tenantId);
+    boolean existsByDocumentAndTenantId(String document, UUID tenantId);
     List<ClientEntity> findAllByTenantId(UUID tenantId);
-    Optional<ClientEntity> findByIdAndTenantId(UUID id, UUID tenantId);
+    Optional<ClientEntity> findByTenantIdAndId(UUID tenantId, UUID clientId);
 }

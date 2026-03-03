@@ -27,8 +27,8 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public Optional<Room> findByIdAndTenantId(UUID id, UUID tenantId) {
-        return jpa.findByIdAndTenantId(id, tenantId)
+    public Optional<Room> findByTenantIdAndId(UUID tenantId, UUID roomId) {
+        return jpa.findByTenantIdAndId(tenantId, roomId)
                 .map(mapper::toDomain);
     }
 
@@ -38,12 +38,12 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public Boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId) {
+    public boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId) {
         return jpa.existsByRoomNumberAndTenantId(roomNumber, tenantId);
     }
 
     @Override
-    public Boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId) {
+    public boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId) {
         return jpa.existsByRoomNumberAndTenantIdAndIdNot(roomNumber, tenantId, roomId);
     }
 }

@@ -23,9 +23,9 @@ public class CheckOutOccupationUseCase {
     private final EntityFinder entityFinder;
 
     @Transactional
-    public Occupation checkOut(UUID occupationId, UUID tenantId){
+    public Occupation checkOut(UUID tenantId, UUID occupationId){
 
-        Occupation occupation = entityFinder.findOccupation(occupationId, tenantId);
+        Occupation occupation = entityFinder.findOccupation(tenantId, occupationId);
 
         if(!"ACTIVE".equals(occupation.getStatus())) {
             log.warn("Occupation is not active");

@@ -22,8 +22,8 @@ public class GetClientUseCase {
         return clientRepository.findAllByTenantId(tenantId);
     }
 
-    public Client findByIdAndTenantId(UUID id, UUID tenantId){
-        return entityFinder.findClient(id, tenantId);
+    public Client findTenantIdAnId(UUID tenantId, UUID clientId){
+        return entityFinder.findClient(tenantId, clientId);
     }
 
 }

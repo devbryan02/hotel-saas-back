@@ -9,8 +9,8 @@ import java.util.UUID;
 public interface ClientRepository {
 
     Client save(Client client);
-    Optional<Client> findByIdAndTenantId(UUID id, UUID tenantId);
+    Optional<Client> findByTenantIdAndId(UUID tenantId, UUID clientId);
     List<Client> findAllByTenantId(UUID tenantId);
-    Boolean existsByDocumentAndTenantId(String document, UUID tenantId);
+    boolean existsByDocumentAndTenantId(String document, UUID tenantId);
 
 }

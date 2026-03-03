@@ -17,7 +17,7 @@ public interface OccupationJpaRepository extends JpaRepository<OccupationEntity,
             "WHERE o.tenant.id = :tenantId")
     List<OccupationEntity> findAllByTenantId(UUID tenantId);
 
-    Optional<OccupationEntity> findByIdAndTenantId(UUID id, UUID tenantId);
+    Optional<OccupationEntity> findByTenantIdAndId(UUID tenantId, UUID occupationId);
 
     @Query("SELECT o FROM OccupationEntity o " +
             "JOIN FETCH o.room " +

@@ -48,19 +48,19 @@ public class OccupationController {
 
     @GetMapping("/{occupationId}")
     public ResponseEntity<OccupationDetailResponse> findById(
-            @PathVariable UUID occupationId,
-            @PathVariable UUID tenantId
+            @PathVariable UUID tenantId,
+            @PathVariable UUID occupationId
     ){
-        Occupation occupation = getOccupationUseCase.findByIdAndTenantId(occupationId, tenantId);
+        Occupation occupation = getOccupationUseCase.findByTenantIdAndId(tenantId, occupationId);
         return ResponseEntity.ok(mapper.toDetailResponse(occupation));
     }
 
     @PostMapping("/{occupationId}/check-out")
     public ResponseEntity<OccupationDetailResponse> checkOut(
-            @PathVariable UUID occupationId,
-            @PathVariable UUID tenantId
+            @PathVariable UUID tenantId,
+            @PathVariable UUID occupationId
     ){
-        Occupation finished = checkOutOccupationUseCase.checkOut(occupationId, tenantId);
+        Occupation finished = checkOutOccupationUseCase.checkOut(tenantId, occupationId);
         return ResponseEntity.ok(mapper.toDetailResponse(finished));
     }
 }

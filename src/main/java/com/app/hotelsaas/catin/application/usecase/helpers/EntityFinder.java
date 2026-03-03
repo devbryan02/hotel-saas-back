@@ -36,24 +36,24 @@ public class EntityFinder {
                 });
     }
 
-    public Room findRoom(UUID roomId, UUID tenantId) {
-        return roomRepository.findByIdAndTenantId(roomId, tenantId)
+    public Room findRoom(UUID tenantId, UUID roomId) {
+        return roomRepository.findByTenantIdAndId(tenantId, roomId)
                 .orElseThrow(() -> {
                     log.warn("Room {} not found for tenant {}", roomId, tenantId);
                     return new RoomNotFoundException("Room not found or not associated with tenant");
                 });
     }
 
-    public Client findClient(UUID clientId, UUID tenantId) {
-        return clientRepository.findByIdAndTenantId(clientId, tenantId)
+    public Client findClient(UUID tenantId, UUID clientId) {
+        return clientRepository.findByTenantIdAndId(tenantId, clientId)
                 .orElseThrow(() -> {
                     log.warn("Client {} not found for tenant {}", clientId, tenantId);
                     return new ClientNotFoundException("Client not found or not associated with tenant");
                 });
     }
 
-    public Occupation findOccupation(UUID occupationId, UUID tenantId){
-        return occupationRepository.findByIdAndTenantId(occupationId, tenantId)
+    public Occupation findOccupation(UUID tenantId, UUID occupationId){
+        return occupationRepository.findByTenantIdAndId(tenantId, occupationId)
                 .orElseThrow(() -> {
                     log.warn("Occupation {} not found for tenant {}", occupationId, tenantId);
                     return new OccupationNotFoundException("Occupation not found or not associated with tenant");

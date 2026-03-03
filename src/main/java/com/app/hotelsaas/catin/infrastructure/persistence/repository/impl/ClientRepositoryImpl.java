@@ -29,8 +29,8 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Optional<Client> findByIdAndTenantId(UUID id, UUID tenantId) {
-        return jpa.findByIdAndTenantId(id, tenantId).map(mapper::toDomain);
+    public Optional<Client> findByTenantIdAndId(UUID tenantId, UUID clientId) {
+        return jpa.findByTenantIdAndId(tenantId, clientId).map(mapper::toDomain);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Boolean existsByDocumentAndTenantId(String document, UUID tenantId) {
+    public boolean existsByDocumentAndTenantId(String document, UUID tenantId) {
         return jpa.existsByDocumentAndTenantId(document, tenantId);
     }
 }

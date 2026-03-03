@@ -22,9 +22,9 @@ public class UpdateClientUseCase {
      * Updates client with request data; persists changes
      */
     @Transactional
-    public Client execute(UUID clientId, UUID tenantId, UpdateClientRequest request){
+    public Client execute(UUID tenantId, UUID clientId, UpdateClientRequest request){
 
-        Client client = clientRepository.findByIdAndTenantId(clientId, tenantId)
+        Client client = clientRepository.findByTenantIdAndId(tenantId, clientId)
                 .orElseThrow(() -> {
                     log.warn("Client not found or not associated with tenant");
                     return new ClientNotFoundException(

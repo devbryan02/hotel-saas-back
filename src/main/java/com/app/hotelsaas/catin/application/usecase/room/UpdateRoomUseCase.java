@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.application.usecase.room;
 
+import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
 import com.app.hotelsaas.catin.domain.exception.DuplicateRoomException;
 import com.app.hotelsaas.catin.domain.exception.RoomNotFoundException;
 import com.app.hotelsaas.catin.domain.model.Room;
@@ -19,14 +20,11 @@ import java.util.UUID;
 public class UpdateRoomUseCase {
 
     private final RoomRepository roomRepository;
+    private final EntityFinder entityFinder;
 
-    public Room execute(UUID roomId, UUID tenantId, UpdateRoomRequest request){
+    public Room execute(UUID tenantId, UUID roomId, UpdateRoomRequest request){
 
-        Room room = roomRepository.findByIdAndTenantId(roomId, tenantId)
-                .orElseThrow(() -> {
-                    log.warn("Room not found with id: {}", roomId);
-                    return new RoomNotFoundException("Room not found or not associated with tenant");
-                });
+        Room room = entityFinder.findRoom(tenantId, roomId);
 
         if(roomRepository.existsByRoomNumberAndTenantIdAndIdNot(request.roomNumber(), tenantId, roomId)){
             log.warn("Room with roomNumber {} already exists", request.roomNumber());

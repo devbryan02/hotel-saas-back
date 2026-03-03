@@ -50,10 +50,10 @@ public class ClientController {
 
     @GetMapping("/{clientId}")
     public ResponseEntity<ClientDetailResponse> findById(
-            @PathVariable UUID clientId,
-            @PathVariable UUID tenantId
+            @PathVariable UUID tenantId,
+            @PathVariable UUID clientId
     ) {
-        Client client = getClientUseCase.findByIdAndTenantId(clientId, tenantId);
+        Client client = getClientUseCase.findTenantIdAnId(tenantId, clientId);
         return ResponseEntity.ok(mapper.toDetailResponse(client));
     }
 
@@ -63,7 +63,7 @@ public class ClientController {
             @PathVariable UUID clientId,
             @Valid @RequestBody UpdateClientRequest request
     ){
-        Client clientUpdated = updateClienteUseCase.execute(clientId, tenantId, request);
+        Client clientUpdated = updateClienteUseCase.execute(tenantId, clientId, request);
         return ResponseEntity.ok(mapper.toDetailResponse(clientUpdated));
     }
 }

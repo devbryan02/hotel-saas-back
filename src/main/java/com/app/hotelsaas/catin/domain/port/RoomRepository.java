@@ -9,9 +9,9 @@ import java.util.UUID;
 public interface RoomRepository {
 
     Room save(Room room);
-    Optional<Room> findByIdAndTenantId(UUID id, UUID tenantId);
+    Optional<Room> findByTenantIdAndId(UUID tenantId, UUID roomId);
     List<Room> findAllByTenantId(UUID tenantId);
-    Boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId);
-    Boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId);
+    boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId);
+    boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId);
 
 }

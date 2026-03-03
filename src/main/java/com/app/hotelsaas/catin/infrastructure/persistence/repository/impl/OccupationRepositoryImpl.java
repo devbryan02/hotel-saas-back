@@ -32,8 +32,8 @@ public class OccupationRepositoryImpl implements OccupationRepository {
     }
 
     @Override
-    public Optional<Occupation> findByIdAndTenantId(UUID id, UUID tenantId) {
-        return jpa.findByIdAndTenantId(id, tenantId).map(mapper::toDomain);
+    public Optional<Occupation> findByTenantIdAndId(UUID tenantId, UUID occupationId) {
+        return jpa.findByTenantIdAndId(tenantId, occupationId).map(mapper::toDomain);
     }
 
     @Override

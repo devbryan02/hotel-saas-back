@@ -50,11 +50,11 @@ public class RoomController {
 
     @PutMapping("/{roomId}")
     public ResponseEntity<RoomDetailResponse> update(
-            @PathVariable UUID roomId,
             @PathVariable UUID tenantId,
+            @PathVariable UUID roomId,
             @Valid @RequestBody UpdateRoomRequest request
     ){
-        Room updated = updateRoomUseCase.execute(roomId, tenantId, request);
+        Room updated = updateRoomUseCase.execute(tenantId, roomId, request);
         return ResponseEntity.ok(mapper.toRoomDetailResponse(updated));
     }
 }
