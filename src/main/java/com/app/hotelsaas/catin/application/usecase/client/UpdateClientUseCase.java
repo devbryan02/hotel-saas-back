@@ -4,10 +4,10 @@ import com.app.hotelsaas.catin.domain.exception.ClientNotFoundException;
 import com.app.hotelsaas.catin.domain.model.Client;
 import com.app.hotelsaas.catin.domain.port.ClientRepository;
 import com.app.hotelsaas.catin.web.rest.client.request.UpdateClientRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
