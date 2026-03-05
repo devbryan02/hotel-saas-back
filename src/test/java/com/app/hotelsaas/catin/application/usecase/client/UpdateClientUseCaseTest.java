@@ -59,6 +59,7 @@ class UpdateClientUseCaseTest {
                 "brayan@gmail.com",
                 "923475893",
                 "ACTIVE",
+                LocalDateTime.now().minusDays(1),
                 LocalDateTime.now()
         );
 
@@ -78,10 +79,10 @@ class UpdateClientUseCaseTest {
         @DisplayName("Deberia actualizar correctamente cuando el cliente y tenant existan")
         void deberiaActualizarCorrectamente() {
 
-            when(clientRepository.findByIdAndTenantId(clientId, tenantId)).thenReturn(Optional.of(clienteExistente));
+            when(clientRepository.findByTenantIdAndId(tenantId, clientId)).thenReturn(Optional.of(clienteExistente));
             when(clientRepository.save(any(Client.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-            Client clienteActualizado = updateClientUseCase.execute(clientId, tenantId, requestValido);
+            Client clienteActualizado = updateClientUseCase.execute(tenantId, clientId, requestValido);
 
             assertThat(clienteActualizado)
                     .isNotNull()
@@ -108,9 +109,9 @@ class UpdateClientUseCaseTest {
         @DisplayName("Deberia fallar cuando client no exista")
         void deberiaFallarCuandoElClienteNoExiste() {
 
-            when(clientRepository.findByIdAndTenantId(clientId, tenantId)).thenReturn(Optional.empty());
+            when(clientRepository.findByTenantIdAndId(tenantId, clientId)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> updateClientUseCase.execute(clientId, tenantId, requestValido))
+            assertThatThrownBy(() -> updateClientUseCase.execute(tenantId, clientId, requestValido))
                     .isInstanceOf(ClientNotFoundException.class)
                     .hasMessageContaining("Client not found or not associated with tenant");
 

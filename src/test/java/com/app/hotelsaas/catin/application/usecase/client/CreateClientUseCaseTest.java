@@ -24,11 +24,8 @@ import static org.mockito.Mockito.*;
 @DisplayName("Caso de uso: Crear cliente")
 class CreateClientUseCaseTest {
 
-    @Mock
-    private EntityFinder entityFinder;
-
-    @Mock
-    private ClientRepository clientRepository;
+    @Mock private EntityFinder entityFinder;
+    @Mock private ClientRepository clientRepository;
 
     @InjectMocks
     private CreateClientUseCase createClientUseCase;
@@ -126,31 +123,6 @@ class CreateClientUseCaseTest {
                     .isInstanceOf(DuplicateClientException.class)
                     .hasMessageContaining("77296138");
 
-            verify(clientRepository, never()).save(any());
-        }
-    }
-
-    @Nested
-    @DisplayName("Tenant ID inválido")
-    class TenantIdInvalido {
-
-        @Test
-        @DisplayName("debería lanzar IllegalArgumentException cuando el tenantId no es un UUID válido")
-        void deberiaFallarConTenantIdMalFormado() {
-
-            UUID tenantIdInvalido = UUID.fromString("tenant-id-mal-formado");
-
-            CreateClientRequest requestInvalido = new CreateClientRequest(
-                    "Bryan Cardenas",
-                    "77296138",
-                    "brayan7br7@gmail.com",
-                    "99245988"
-            );
-
-            assertThatThrownBy(() -> createClientUseCase.execute(tenantIdInvalido, requestInvalido))
-                    .isInstanceOf(IllegalArgumentException.class);
-
-            verify(entityFinder, never()).findTenant(any());
             verify(clientRepository, never()).save(any());
         }
     }

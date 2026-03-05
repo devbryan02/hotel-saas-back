@@ -78,6 +78,7 @@ class CreateOccupationUseCaseTest {
                 "bryan@gmail.com",
                 "999888777",
                 "ACTIVE",
+                null,
                 null
         );
 
@@ -96,8 +97,8 @@ class CreateOccupationUseCaseTest {
         void deberiaCrearOcupacionCorrectamente() {
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);
-            when(entityFinder.findRoom(roomId, tenantId)).thenReturn(roomDisponible);
-            when(entityFinder.findClient(clientId, tenantId)).thenReturn(clienteExistente);
+            when(entityFinder.findRoom(tenantId, roomId)).thenReturn(roomDisponible);
+            when(entityFinder.findClient(tenantId, clientId)).thenReturn(clienteExistente);
             when(roomRepository.save(any(Room.class))).thenAnswer(inv -> inv.getArgument(0));
             when(occupationRepository.save(any(Occupation.class))).thenAnswer(inv -> inv.getArgument(0));
 
@@ -167,8 +168,8 @@ class CreateOccupationUseCaseTest {
                     BigDecimal.valueOf(80.00), "OCCUPIED");
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);
-            when(entityFinder.findRoom(roomId, tenantId)).thenReturn(roomOcupada);
-            when(entityFinder.findClient(clientId, tenantId)).thenReturn(clienteExistente);
+            when(entityFinder.findRoom(tenantId, roomId)).thenReturn(roomOcupada);
+            when(entityFinder.findClient(tenantId, clientId)).thenReturn(clienteExistente);
 
             assertThatThrownBy(() ->
                     createOccupationUseCase.execute(tenantId, roomId, clientId, requestValido))
@@ -187,8 +188,8 @@ class CreateOccupationUseCaseTest {
                     BigDecimal.valueOf(80.00), "MAINTENANCE");
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);
-            when(entityFinder.findRoom(roomId, tenantId)).thenReturn(roomMantenimiento);
-            when(entityFinder.findClient(clientId, tenantId)).thenReturn(clienteExistente);
+            when(entityFinder.findRoom(tenantId, roomId)).thenReturn(roomMantenimiento);
+            when(entityFinder.findClient(tenantId, clientId)).thenReturn(clienteExistente);
 
             assertThatThrownBy(() ->
                     createOccupationUseCase.execute(tenantId, roomId, clientId, requestValido))
@@ -214,8 +215,8 @@ class CreateOccupationUseCaseTest {
             );
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);
-            when(entityFinder.findRoom(roomId, tenantId)).thenReturn(roomDisponible);
-            when(entityFinder.findClient(clientId, tenantId)).thenReturn(clienteExistente);
+            when(entityFinder.findRoom(tenantId, roomId)).thenReturn(roomDisponible);
+            when(entityFinder.findClient(tenantId, clientId)).thenReturn(clienteExistente);
             when(roomRepository.save(any(Room.class))).thenAnswer(inv -> inv.getArgument(0));
             when(occupationRepository.save(any(Occupation.class))).thenAnswer(inv -> inv.getArgument(0));
 
@@ -234,8 +235,8 @@ class CreateOccupationUseCaseTest {
             );
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);
-            when(entityFinder.findRoom(roomId, tenantId)).thenReturn(roomDisponible);
-            when(entityFinder.findClient(clientId, tenantId)).thenReturn(clienteExistente);
+            when(entityFinder.findRoom(tenantId, roomId)).thenReturn(roomDisponible);
+            when(entityFinder.findClient(tenantId, clientId)).thenReturn(clienteExistente);
             when(roomRepository.save(any(Room.class))).thenAnswer(inv -> inv.getArgument(0));
             when(occupationRepository.save(any(Occupation.class))).thenAnswer(inv -> inv.getArgument(0));
 
