@@ -2,8 +2,10 @@ package com.app.hotelsaas.catin.application.usecase.ocupation;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
 import com.app.hotelsaas.catin.domain.exception.OccupationNotActiveException;
+import com.app.hotelsaas.catin.domain.model.Client;
 import com.app.hotelsaas.catin.domain.model.Occupation;
 import com.app.hotelsaas.catin.domain.model.Room;
+import com.app.hotelsaas.catin.domain.port.ClientRepository;
 import com.app.hotelsaas.catin.domain.port.OccupationRepository;
 import com.app.hotelsaas.catin.domain.port.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class CheckOutOccupationUseCase {
 
     private final OccupationRepository occupationRepository;
     private final RoomRepository roomRepository;
+    private final ClientRepository clientRepository;
     private final EntityFinder entityFinder;
 
     @Transactional
@@ -37,9 +40,11 @@ public class CheckOutOccupationUseCase {
         occupationRepository.save(finished);
 
         // ROOM: OCCUPIED -> AVAILABLE
-        Room roomCurrent = entityFinder.findRoom(occupation.getRoom().getId(), tenantId);
-        Room releaseRoom = roomCurrent.release();
+        Room releaseRoom = occupation.getRoom().release();
         roomRepository.save(releaseRoom);
+
+        Client updateClientStay = occupation.getClient().registerStay();
+        clientRepository.save(updateClientStay);
 
         return finished;
     }

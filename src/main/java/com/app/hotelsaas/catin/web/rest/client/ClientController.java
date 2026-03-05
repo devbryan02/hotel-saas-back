@@ -48,6 +48,25 @@ public class ClientController {
        return ResponseEntity.ok(mapper.toListItemResponses(clients));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ClientListItemResponse>> searchByQuery(
+            @PathVariable UUID tenantId,
+            @RequestParam String query
+    ){
+        List<Client> clients = getClientUseCase.searchByTenantIdAndQuery(tenantId, query);
+        return ResponseEntity.ok(mapper.toListItemResponses(clients));
+    }
+
+    @GetMapping("/search/status")
+    public ResponseEntity<List<ClientListItemResponse>> searchByQueryAndStatus(
+            @PathVariable UUID tenantId,
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String status
+    ){
+        List<Client> clients = getClientUseCase.searchByTenantIdAndQueryAndStatus(tenantId, query, status);
+        return ResponseEntity.ok(mapper.toListItemResponses(clients));
+    }
+
     @GetMapping("/{clientId}")
     public ResponseEntity<ClientDetailResponse> findById(
             @PathVariable UUID tenantId,

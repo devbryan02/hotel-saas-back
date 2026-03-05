@@ -38,7 +38,7 @@ public class CreateOccupationUseCase {
 
         Tenant tenant = entityFinder.findTenant(tenantId);
         Room room = entityFinder.findRoom(tenantId, roomId);
-        Client client = entityFinder.findClient(tenantId, roomId);
+        Client client = entityFinder.findClient(tenantId, clientId);
 
         if (!"AVAILABLE".equals(room.getStatus())) {
             log.warn("Room is not available. Current status: {}", room.getStatus());

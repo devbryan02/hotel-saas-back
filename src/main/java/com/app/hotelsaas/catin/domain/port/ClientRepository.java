@@ -12,5 +12,7 @@ public interface ClientRepository {
     Optional<Client> findByTenantIdAndId(UUID tenantId, UUID clientId);
     List<Client> findAllByTenantId(UUID tenantId);
     boolean existsByDocumentAndTenantId(String document, UUID tenantId);
+    List<Client> searchByTenantIdAndQuery(UUID tenantId, String query);
+    List<Client> searchByTenantIdAndQueryAndStatus(UUID tenantId, String query, String status);
 
 }

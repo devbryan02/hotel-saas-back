@@ -19,6 +19,7 @@ public class ClientRestMapper {
                 client.getEmail(),
                 client.getPhone(),
                 client.getStatus(),
+                client.getLastStayAt(),
                 client.getCreatedAt()
         );
     }
@@ -32,7 +33,8 @@ public class ClientRestMapper {
                         c.getDocument(),
                         c.getPhone(),
                         c.getEmail(),
-                        c.getStatus()
+                        c.getStatus(),
+                        c.getLastStayAt()
                 ))
                 .toList();
     }

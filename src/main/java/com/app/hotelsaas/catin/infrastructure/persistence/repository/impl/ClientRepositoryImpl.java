@@ -42,4 +42,18 @@ public class ClientRepositoryImpl implements ClientRepository {
     public boolean existsByDocumentAndTenantId(String document, UUID tenantId) {
         return jpa.existsByDocumentAndTenantId(document, tenantId);
     }
+
+    @Override
+    public List<Client> searchByTenantIdAndQuery(UUID tenantId, String document) {
+        return jpa.searchByTenantIdAndQuery(tenantId, document)
+                .stream()
+                .map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public List<Client> searchByTenantIdAndQueryAndStatus(UUID tenantId, String query, String status) {
+        return jpa.searchByTenantIdAndQueryAndStatus(tenantId, query, status)
+                .stream()
+                .map(mapper::toDomain).toList();
+    }
 }

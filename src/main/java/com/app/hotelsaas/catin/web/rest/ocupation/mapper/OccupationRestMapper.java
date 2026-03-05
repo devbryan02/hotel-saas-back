@@ -49,6 +49,7 @@ public class OccupationRestMapper {
                             o.getCheckInDate(),
                             o.getCheckOutDate(),
                             nights,
+                            o.getRoom().getPricePerNight(),
                             o.getTotalPrice(),
                             o.getStatus()
                     );

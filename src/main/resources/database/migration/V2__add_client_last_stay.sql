@@ -1,0 +1,2 @@
+ALTER TABLE client
+    ADD COLUMN last_stay_at TIMESTAMP DEFAULT NULL;

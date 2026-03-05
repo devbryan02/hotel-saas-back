@@ -28,5 +28,6 @@ public class ClientEntity {
     private String email;
     private String phone;
     private String status;
+    private LocalDateTime lastStayAt;
     private LocalDateTime createdAt;
 }

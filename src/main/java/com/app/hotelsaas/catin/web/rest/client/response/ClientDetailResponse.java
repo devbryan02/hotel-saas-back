@@ -11,5 +11,7 @@ public record ClientDetailResponse(
         String phone,
         String status,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime lastStayAt,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt
 ) {}

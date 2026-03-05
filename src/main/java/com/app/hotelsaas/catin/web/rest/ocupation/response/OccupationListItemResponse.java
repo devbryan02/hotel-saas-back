@@ -15,7 +15,7 @@ public record OccupationListItemResponse(
         LocalDate checkInDate,
         LocalDate checkOutDate,
         long nights,
-
+        BigDecimal pricePerNight,
         BigDecimal totalPrice,
 
         String status
