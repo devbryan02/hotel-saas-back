@@ -13,6 +13,7 @@ public record RoomListItemResponse(
         ActiveClientResponse activeClient
 ) {
     public record ActiveClientResponse(
+            String occupationId,
             String clientId,
             String fullName,
             String document,

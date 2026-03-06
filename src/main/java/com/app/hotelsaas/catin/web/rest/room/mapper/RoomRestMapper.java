@@ -37,6 +37,7 @@ public class RoomRestMapper {
 
         if (rwo.occupation() != null) {
             clientResponse = new RoomListItemResponse.ActiveClientResponse(
+                    rwo.occupation().getId().toString(),
                     rwo.occupation().getClient().getId().toString(),
                     rwo.occupation().getClient().getFullName(),
                     rwo.occupation().getClient().getDocument(),

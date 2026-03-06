@@ -3,11 +3,10 @@ package com.app.hotelsaas.catin.web.rest.ocupation.mapper;
 import com.app.hotelsaas.catin.domain.model.Occupation;
 import com.app.hotelsaas.catin.web.rest.ocupation.response.OccupationDetailResponse;
 import com.app.hotelsaas.catin.web.rest.ocupation.response.OccupationListItemResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class OccupationRestMapper {
@@ -33,9 +32,8 @@ public class OccupationRestMapper {
         );
     }
 
-    public List<OccupationListItemResponse> toListItemResponses(List<Occupation> occupations) {
-        return occupations.stream()
-                .map(o -> {
+    public Page<OccupationListItemResponse> toListItemResponses(Page<Occupation> occupations) {
+        return occupations.map(o -> {
                     long nights = ChronoUnit.DAYS.between(
                             o.getCheckInDate(),
                             o.getCheckOutDate()
@@ -53,7 +51,6 @@ public class OccupationRestMapper {
                             o.getTotalPrice(),
                             o.getStatus()
                     );
-                })
-                .toList();
+                });
     }
 }

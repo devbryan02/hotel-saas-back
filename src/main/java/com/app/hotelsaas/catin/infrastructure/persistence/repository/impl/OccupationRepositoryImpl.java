@@ -5,6 +5,10 @@ import com.app.hotelsaas.catin.domain.port.OccupationRepository;
 import com.app.hotelsaas.catin.infrastructure.persistence.mapper.OccupationEntityMapper;
 import com.app.hotelsaas.catin.infrastructure.persistence.repository.jpa.OccupationJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,8 +31,9 @@ public class OccupationRepositoryImpl implements OccupationRepository {
     }
 
     @Override
-    public List<Occupation> findAllByTenantId(UUID tenantId) {
-        return jpa.findAllByTenantId(tenantId).stream().map(mapper::toDomain).toList();
+    public Page<Occupation> findAllByTenantId(UUID tenantId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return jpa.findAllByTenantId(tenantId, pageable).map(mapper::toDomain);
     }
 
     @Override

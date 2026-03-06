@@ -8,13 +8,14 @@ import com.app.hotelsaas.catin.web.rest.ocupation.mapper.OccupationRestMapper;
 import com.app.hotelsaas.catin.web.rest.ocupation.request.CreateOccupationRequest;
 import com.app.hotelsaas.catin.web.rest.ocupation.response.OccupationDetailResponse;
 import com.app.hotelsaas.catin.web.rest.ocupation.response.OccupationListItemResponse;
+import com.app.hotelsaas.catin.web.rest.shared.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,9 +42,13 @@ public class OccupationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OccupationListItemResponse>> findAll(@PathVariable UUID tenantId){
-        List<Occupation> occupations = getOccupationUseCase.findAllByTenantId(tenantId);
-        return ResponseEntity.ok(mapper.toListItemResponses(occupations));
+    public ResponseEntity<PageResponse<OccupationListItemResponse>> findAll(
+            @PathVariable UUID tenantId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ){
+        Page<Occupation> occupations = getOccupationUseCase.findAllByTenantId(tenantId, page, size);
+        return ResponseEntity.ok(PageResponse.from(mapper.toListItemResponses(occupations)));
     }
 
     @GetMapping("/{occupationId}")
