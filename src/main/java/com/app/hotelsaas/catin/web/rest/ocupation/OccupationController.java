@@ -45,9 +45,10 @@ public class OccupationController {
     public ResponseEntity<PageResponse<OccupationListItemResponse>> findAll(
             @PathVariable UUID tenantId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String status
     ){
-        Page<Occupation> occupations = getOccupationUseCase.findAllByTenantId(tenantId, page, size);
+        Page<Occupation> occupations = getOccupationUseCase.findAllByTenantId(tenantId, page, size, status);
         return ResponseEntity.ok(PageResponse.from(mapper.toListItemResponses(occupations)));
     }
 

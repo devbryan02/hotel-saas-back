@@ -18,7 +18,12 @@ public class GetOccupationUseCase {
     private final OccupationRepository occupationRepository;
     private final EntityFinder entityFinder;
 
-    public Page<Occupation> findAllByTenantId(UUID tenantId, int page, int size){
+    public Page<Occupation> findAllByTenantId(UUID tenantId, int page, int size, String status){
+        if (status != null && !status.isBlank()) {
+            log.info("Searching occupations by status: {}", status);
+            return occupationRepository.findAllByTenantIdAndStatus(tenantId, status, page, size);
+        }
+        log.info("Searching all occupations");
         return occupationRepository.findAllByTenantId(tenantId, page, size);
     }
 

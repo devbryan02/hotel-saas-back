@@ -21,6 +21,8 @@ public interface OccupationJpaRepository extends JpaRepository<OccupationEntity,
             Pageable pageable
     );
 
+    Page<OccupationEntity> findByTenantIdAndStatus(UUID tenantId, String status, Pageable pageable);
+
     Optional<OccupationEntity> findByTenantIdAndId(UUID tenantId, UUID occupationId);
 
     @Query("SELECT o FROM OccupationEntity o " +

@@ -37,6 +37,12 @@ public class OccupationRepositoryImpl implements OccupationRepository {
     }
 
     @Override
+    public Page<Occupation> findAllByTenantIdAndStatus(UUID tenantId, String status, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return jpa.findByTenantIdAndStatus(tenantId, status, pageable).map(mapper::toDomain);
+    }
+
+    @Override
     public Optional<Occupation> findByTenantIdAndId(UUID tenantId, UUID occupationId) {
         return jpa.findByTenantIdAndId(tenantId, occupationId).map(mapper::toDomain);
     }
