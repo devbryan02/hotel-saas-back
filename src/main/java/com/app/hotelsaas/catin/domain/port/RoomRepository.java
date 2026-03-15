@@ -13,5 +13,4 @@ public interface RoomRepository {
     List<Room> findAllByTenantId(UUID tenantId);
     boolean existsByRoomNumberAndTenantId(String roomNumber, UUID tenantId);
     boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId);
-
 }

@@ -13,5 +13,7 @@ public interface RoomJpaRepository extends JpaRepository<RoomEntity, UUID> {
     boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId);
     Optional<RoomEntity> findByTenantIdAndId(UUID tenantId, UUID roomId);
     List<RoomEntity> findAllByTenantId(UUID tenantId);
+    long countByTenantId(UUID tenantId);
+    long countByTenantIdAndStatus(UUID tenantId, String status);
 
 }

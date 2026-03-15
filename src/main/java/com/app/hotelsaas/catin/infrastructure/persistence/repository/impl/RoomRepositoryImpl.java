@@ -46,4 +46,5 @@ public class RoomRepositoryImpl implements RoomRepository {
     public boolean existsByRoomNumberAndTenantIdAndIdNot(String roomNumber, UUID tenantId, UUID roomId) {
         return jpa.existsByRoomNumberAndTenantIdAndIdNot(roomNumber, tenantId, roomId);
     }
+
 }

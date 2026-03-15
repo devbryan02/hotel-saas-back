@@ -38,5 +38,6 @@ public class OccupationEntity {
     private String status;
     private BigDecimal totalPrice;
     private LocalDateTime createdAt;
+    private LocalDateTime finishedAt;
 
 }
