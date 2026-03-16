@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record CreateOccupationRequest(
@@ -14,6 +15,8 @@ public record CreateOccupationRequest(
 
         @NotNull(message = "La fecha de check-out es obligatoria")
         @Future(message = "El check-out debe ser una fecha futura")
-        LocalDate checkOutDate
+        LocalDate checkOutDate,
+
+        BigDecimal totalPrice
 
 ) { }

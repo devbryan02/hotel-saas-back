@@ -45,8 +45,16 @@ public class CreateOccupationUseCase {
             throw new RoomNotAvailableException("Room is not available. Current status: " + room.getStatus());
         }
 
-        long days = ChronoUnit.DAYS.between(request.checkInDate(), request.checkOutDate());
-        BigDecimal totalPrice = room.getPricePerNight().multiply(BigDecimal.valueOf(days));
+        // Si el frontend manda totalPrice lo usamos, si no calculamos automático
+        BigDecimal totalPrice;
+        if (request.totalPrice() != null && request.totalPrice().compareTo(BigDecimal.ZERO) > 0) {
+            totalPrice = request.totalPrice();
+            log.info("Using custom totalPrice: {}", totalPrice);
+        } else {
+            long days = ChronoUnit.DAYS.between(request.checkInDate(), request.checkOutDate());
+            totalPrice = room.getPricePerNight().multiply(BigDecimal.valueOf(days));
+            log.info("Calculated totalPrice: {} ({} days x {})", totalPrice, days, room.getPricePerNight());
+        }
 
         Room occupiedRoom  = room.occupy();
         roomRepository.save(occupiedRoom);

@@ -70,4 +70,7 @@ public interface OccupationJpaRepository extends JpaRepository<OccupationEntity,
             @Param("startOfMonth") LocalDateTime startOfMonth,
             @Param("endOfMonth") LocalDateTime endOfMonth
     );
+
+    @Query("SELECT o FROM OccupationEntity o WHERE o.status = 'ACTIVE' AND o.checkOutDate <= :date")
+    List<OccupationEntity> findActiveByCheckOutDateLessThanEqual(@Param("date") LocalDate date);
 }

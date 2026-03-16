@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,6 +51,12 @@ public class OccupationRepositoryImpl implements OccupationRepository {
     @Override
     public List<Occupation> findActiveByTenantId(UUID tenantId) {
         return jpa.findActiveByTenantId(tenantId).stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public List<Occupation> findActiveByCheckOutDateLessThanEqual(LocalDate date) {
+        return jpa.findActiveByCheckOutDateLessThanEqual(date).stream().map(mapper::toDomain)
+                .toList();
     }
 
 }
