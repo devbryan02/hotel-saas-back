@@ -2,6 +2,7 @@ package com.app.hotelsaas.catin.infrastructure.security;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,6 +29,8 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsServiceImpl userDetailsService;
+    @Value("${app.front.url}")
+    private String appFrontUrl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -90,7 +93,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://zowy-app.vercel.app/"));
+        config.setAllowedOrigins(List.of(appFrontUrl));
         config.setAllowedMethods(
             List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
         );
