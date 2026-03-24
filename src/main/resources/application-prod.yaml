@@ -35,4 +35,4 @@ admin:
 
 app:
   front:
-    url: https://zowy-app.vercel.app
+    url: https://zowy.vercel.app/
