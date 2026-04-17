@@ -1,6 +1,7 @@
 package com.app.hotelsaas.catin.infrastructure.security;
 
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -35,34 +36,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth ->
-                auth
-                    .requestMatchers(HttpMethod.OPTIONS, "/**")
-                    .permitAll()
-                    // ─── RUTAS PÚBLICAS
-                    .requestMatchers("/auth/**")
-                    .permitAll()
-                    // ─── RUTAS PROTEGIDAS POR ROL
-                    .requestMatchers("/tenants/*/rooms/**")
-                    .hasAnyRole("ADMIN", "RECEPTIONIST")
-                    .requestMatchers("/tenants/*/clients/**")
-                    .hasAnyRole("ADMIN", "RECEPTIONIST")
-                    .requestMatchers("/tenants/*/occupations/**")
-                    .hasAnyRole("ADMIN", "RECEPTIONIST")
-                    // ─── CUALQUIER OTRA
-                    .anyRequest()
-                    .authenticated()
-            )
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authenticationProvider(authenticationProvider())
-            .addFilterBefore(
-                jwtAuthFilter,
-                UsernamePasswordAuthenticationFilter.class
-            );
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth ->
+                        auth
+                                // ─── RUTAS PÚBLICAS
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
+
+                                // ─── RUTAS PROTEGIDAS POR ROL
+                                .requestMatchers("/tenants/*/rooms/**").hasAnyRole("ADMIN", "RECEPTIONIST")
+                                .requestMatchers("/tenants/*/clients/**").hasAnyRole("ADMIN", "RECEPTIONIST")
+                                .requestMatchers("/tenants/*/occupations/**").hasAnyRole("ADMIN", "RECEPTIONIST")
+
+                                // ─── CUALQUIER OTRA
+                                .anyRequest()
+                                .authenticated()
+                )
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(
+                        jwtAuthFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }
@@ -70,7 +69,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(
-            userDetailsService
+                userDetailsService
         );
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
@@ -78,7 +77,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-        AuthenticationConfiguration config
+            AuthenticationConfiguration config
     ) {
         return config.getAuthenticationManager();
     }
@@ -95,13 +94,13 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(appFrontUrl));
         config.setAllowedMethods(
-            List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
         );
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));
 
         UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
+                new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", config);
         return source;

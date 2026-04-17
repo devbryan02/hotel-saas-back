@@ -5,6 +5,7 @@ import com.app.hotelsaas.catin.domain.exception.DuplicateClientException;
 import com.app.hotelsaas.catin.domain.model.Client;
 import com.app.hotelsaas.catin.domain.model.Tenant;
 import com.app.hotelsaas.catin.domain.port.ClientRepository;
+import com.app.hotelsaas.catin.infrastructure.metrics.HotelMetrics;
 import com.app.hotelsaas.catin.web.rest.client.request.CreateClientRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class CreateClientUseCase {
 
     private final ClientRepository clientRepository;
     private final EntityFinder entityFinder;
+    private final HotelMetrics hotelMetrics;
 
     /**
      * Executes transactional client creation; persists and returns result
@@ -44,6 +46,9 @@ public class CreateClientUseCase {
 
         Client clientSaved = clientRepository.save(client);
         log.info("Client created: {}", clientSaved);
+
+        // METRICS
+        hotelMetrics.recordNewClient();
 
         return clientSaved;
     }
