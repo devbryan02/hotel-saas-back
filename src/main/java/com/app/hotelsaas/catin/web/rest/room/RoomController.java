@@ -10,6 +10,8 @@ import com.app.hotelsaas.catin.web.rest.room.request.CreateRoomRequest;
 import com.app.hotelsaas.catin.web.rest.room.request.UpdateRoomRequest;
 import com.app.hotelsaas.catin.web.rest.room.response.RoomDetailResponse;
 import com.app.hotelsaas.catin.web.rest.room.response.RoomListItemResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/tenants/{tenantId}/rooms")
 @RequiredArgsConstructor
+@Tag(name = "Habitaciones", description = "Gestión de habitaciones")
 public class RoomController {
 
     private final CreateRoomUseCase createRoomUseCase;
@@ -29,6 +32,7 @@ public class RoomController {
     private final GetRoomUseCase getRoomUseCase;
     private final RoomRestMapper mapper;
 
+    @Operation(summary = "Crea nueva habitación")
     @PostMapping
     public ResponseEntity<RoomDetailResponse> create(
             @PathVariable UUID tenantId,
@@ -40,6 +44,7 @@ public class RoomController {
         ).body(mapper.toRoomDetailResponse(saved));
     }
 
+    @Operation(summary = "Obtiene todas las habitaciones")
     @GetMapping
     public ResponseEntity<List<RoomListItemResponse>> findAll(
             @PathVariable UUID tenantId
@@ -48,6 +53,7 @@ public class RoomController {
         return ResponseEntity.ok(mapper.toListItemResponses(rooms));
     }
 
+    @Operation(summary = "Actualiza una habitacion por id")
     @PutMapping("/{roomId}")
     public ResponseEntity<RoomDetailResponse> update(
             @PathVariable UUID tenantId,

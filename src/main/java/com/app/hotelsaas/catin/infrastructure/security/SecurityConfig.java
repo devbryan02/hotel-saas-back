@@ -44,6 +44,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
 
                                 // ─── RUTAS PROTEGIDAS POR ROL
                                 .requestMatchers("/tenants/*/rooms/**").hasAnyRole("ADMIN", "RECEPTIONIST")

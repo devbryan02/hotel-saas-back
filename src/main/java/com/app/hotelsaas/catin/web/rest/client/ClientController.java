@@ -9,6 +9,8 @@ import com.app.hotelsaas.catin.web.rest.client.request.CreateClientRequest;
 import com.app.hotelsaas.catin.web.rest.client.request.UpdateClientRequest;
 import com.app.hotelsaas.catin.web.rest.client.response.ClientListItemResponse;
 import com.app.hotelsaas.catin.web.rest.client.response.ClientDetailResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/tenants/{tenantId}/clients")
 @RequiredArgsConstructor
+@Tag(name = "Cliente", description = "Gestión de clientes/huespedes")
 public class ClientController {
 
     private final CreateClientUseCase createClientUseCase;
@@ -28,6 +31,7 @@ public class ClientController {
     private final UpdateClientUseCase updateClienteUseCase;
     private final ClientRestMapper mapper;
 
+    @Operation(summary = "Crea un nuevo cliente")
     @PostMapping
     public ResponseEntity<ClientDetailResponse> create(
             @PathVariable UUID tenantId,
@@ -40,6 +44,7 @@ public class ClientController {
                 .body(mapper.toDetailResponse(saved));
     }
 
+    @Operation(summary = "Obtiene todos los clientes")
     @GetMapping
     public ResponseEntity<List<ClientListItemResponse>> findAll(
             @PathVariable UUID tenantId
@@ -48,6 +53,7 @@ public class ClientController {
        return ResponseEntity.ok(mapper.toListItemResponses(clients));
     }
 
+    @Operation(summary = "Busca clientes por palabra")
     @GetMapping("/search")
     public ResponseEntity<List<ClientListItemResponse>> searchByQuery(
             @PathVariable UUID tenantId,
@@ -57,6 +63,7 @@ public class ClientController {
         return ResponseEntity.ok(mapper.toListItemResponses(clients));
     }
 
+    @Operation(summary = "Busca clientes por palabra y estado")
     @GetMapping("/search/status")
     public ResponseEntity<List<ClientListItemResponse>> searchByQueryAndStatus(
             @PathVariable UUID tenantId,
@@ -67,6 +74,7 @@ public class ClientController {
         return ResponseEntity.ok(mapper.toListItemResponses(clients));
     }
 
+    @Operation(summary = "Obtiene un cliente por su id")
     @GetMapping("/{clientId}")
     public ResponseEntity<ClientDetailResponse> findById(
             @PathVariable UUID tenantId,
@@ -76,6 +84,7 @@ public class ClientController {
         return ResponseEntity.ok(mapper.toDetailResponse(client));
     }
 
+    @Operation(summary = "Actualiza un cliente")
     @PutMapping("/{clientId}")
     public ResponseEntity<ClientDetailResponse> update(
             @PathVariable UUID tenantId,

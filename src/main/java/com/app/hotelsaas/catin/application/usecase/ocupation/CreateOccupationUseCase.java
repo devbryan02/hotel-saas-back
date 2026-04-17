@@ -9,7 +9,6 @@ import com.app.hotelsaas.catin.domain.model.Room;
 import com.app.hotelsaas.catin.domain.model.Tenant;
 import com.app.hotelsaas.catin.domain.port.OccupationRepository;
 import com.app.hotelsaas.catin.domain.port.RoomRepository;
-import com.app.hotelsaas.catin.infrastructure.metrics.HotelMetrics;
 import com.app.hotelsaas.catin.web.rest.ocupation.request.CreateOccupationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,6 @@ public class CreateOccupationUseCase {
     private final OccupationRepository occupationRepository;
     private final RoomRepository roomRepository;
     private final EntityFinder entityFinder;
-    private final HotelMetrics hotelMetrics;
 
     @Transactional
     public Occupation execute(UUID tenantId, UUID roomId, UUID clientId, CreateOccupationRequest request) {
@@ -70,9 +68,6 @@ public class CreateOccupationUseCase {
 
         Occupation saved = occupationRepository.save(occupation);
         log.info("Occupation created: {}", saved);
-
-        // METRICS
-        hotelMetrics.recordCheckIn();
 
         return saved;
     }

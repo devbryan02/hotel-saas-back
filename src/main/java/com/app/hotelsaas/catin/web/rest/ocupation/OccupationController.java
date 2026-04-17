@@ -9,6 +9,8 @@ import com.app.hotelsaas.catin.web.rest.ocupation.request.CreateOccupationReques
 import com.app.hotelsaas.catin.web.rest.ocupation.response.OccupationDetailResponse;
 import com.app.hotelsaas.catin.web.rest.ocupation.response.OccupationListItemResponse;
 import com.app.hotelsaas.catin.web.rest.shared.PageResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/tenants/{tenantId}/occupations")
 @RequiredArgsConstructor
+@Tag(name = "Occupaciones", description = "Gestión de ocupaciones ")
 public class OccupationController {
 
     private final CreateOccupationUseCase createOccupationUseCase;
@@ -28,6 +31,7 @@ public class OccupationController {
     private final CheckOutOccupationUseCase checkOutOccupationUseCase;
     private final OccupationRestMapper mapper;
 
+    @Operation(summary = "Crea nueva ocupacion")
     @PostMapping("/rooms/{roomId}/clients/{clientId}")
     public ResponseEntity<OccupationDetailResponse> create(
             @PathVariable UUID tenantId,
@@ -41,6 +45,7 @@ public class OccupationController {
         ).body(mapper.toDetailResponse(saved));
     }
 
+    @Operation(summary = "Obtiene todas las ocupaciones")
     @GetMapping
     public ResponseEntity<PageResponse<OccupationListItemResponse>> findAll(
             @PathVariable UUID tenantId,
@@ -52,6 +57,7 @@ public class OccupationController {
         return ResponseEntity.ok(PageResponse.from(mapper.toListItemResponses(occupations)));
     }
 
+    @Operation(summary = "Obtiene una ocupacion por su id")
     @GetMapping("/{occupationId}")
     public ResponseEntity<OccupationDetailResponse> findById(
             @PathVariable UUID tenantId,
@@ -61,6 +67,7 @@ public class OccupationController {
         return ResponseEntity.ok(mapper.toDetailResponse(occupation));
     }
 
+    @Operation(summary = "Finaliza una ocupacion")
     @PostMapping("/{occupationId}/check-out")
     public ResponseEntity<OccupationDetailResponse> checkOut(
             @PathVariable UUID tenantId,

@@ -8,7 +8,6 @@ import com.app.hotelsaas.catin.domain.model.Room;
 import com.app.hotelsaas.catin.domain.port.ClientRepository;
 import com.app.hotelsaas.catin.domain.port.OccupationRepository;
 import com.app.hotelsaas.catin.domain.port.RoomRepository;
-import com.app.hotelsaas.catin.infrastructure.metrics.HotelMetrics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class CheckOutOccupationUseCase {
     private final RoomRepository roomRepository;
     private final ClientRepository clientRepository;
     private final EntityFinder entityFinder;
-    private final HotelMetrics hotelMetrics;
 
     @Transactional
     public Occupation checkOut(UUID tenantId, UUID occupationId){
@@ -47,9 +45,6 @@ public class CheckOutOccupationUseCase {
 
         Client updateClientStay = occupation.getClient().registerStay();
         clientRepository.save(updateClientStay);
-
-        // METRICS
-        hotelMetrics.recordCheckOut();
 
         return finished;
     }
