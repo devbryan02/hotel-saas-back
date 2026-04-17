@@ -27,19 +27,9 @@ public class CreateRoomUseCase {
     public Room execute(UUID tenantId, CreateRoomRequest request) {
         Tenant tenant = entityFinder.findTenant(tenantId);
 
-        if (
-            roomRepository.existsByRoomNumberAndTenantId(
-                request.roomNumber(),
-                tenantId
-            )
-        ) {
-            log.warn(
-                "Room with roomNumber {} already exists",
-                request.roomNumber()
-            );
-            throw new DuplicateRoomException(
-                "Room with roomNumber " +
-                    request.roomNumber() +
+        if (roomRepository.existsByRoomNumberAndTenantId(request.roomNumber(), tenantId)) {
+            log.warn("Room with roomNumber {} already exists", request.roomNumber());
+            throw new DuplicateRoomException("Room with roomNumber " + request.roomNumber() +
                     " already exists"
             );
         }
@@ -48,10 +38,7 @@ public class CreateRoomUseCase {
             tenant,
             request.roomNumber(),
             request.roomType(),
-            BigDecimal.valueOf(request.pricePerNight()).setScale(
-                2,
-                RoundingMode.HALF_UP
-            )
+            BigDecimal.valueOf(request.pricePerNight()).setScale(2, RoundingMode.HALF_UP)
         );
 
         return roomRepository.save(room);

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -51,9 +52,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            // Extrae el tenantId del JWT y lo agrega al CustomUserDetails
+            UUID tenantId = jwtService.extractTenantId(jwt);
+            UserDetails baseUser = userDetailsService.loadUserByUsername(email);
+            CustomUserDetails userDetails = new CustomUserDetails(baseUser, tenantId);
 
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+            // valid the token
+            if (jwtService.isTokenValid(jwt, baseUser)) {
 
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
@@ -66,10 +71,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
 
-                // 4. Setea la autenticación en el contexto
+                // Setea la autenticación en el contexto
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                log.debug("Authenticated user: {}, role: {}",
-                        email, userDetails.getAuthorities());
+                log.debug("Authenticated user: {}, tenant: {}, role: {}",
+                        email,
+                        tenantId,
+                        userDetails.getAuthorities());
             }
         }
 
