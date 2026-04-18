@@ -47,8 +47,14 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/v2/api-docs/**",
+                                        "/swagger-resources/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/webjars/**"
+                                ).permitAll()
 
                                 // ─── RUTAS PROTEGIDAS POR ROL
                                 .requestMatchers("/tenants/*/rooms/**").hasAnyRole("ADMIN", "RECEPTIONIST")
@@ -102,7 +108,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(appFrontUrl));
+        config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
         );
