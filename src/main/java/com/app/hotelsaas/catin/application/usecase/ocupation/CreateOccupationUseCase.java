@@ -67,7 +67,7 @@ public class CreateOccupationUseCase {
         );
 
         Occupation saved = occupationRepository.save(occupation);
-        log.info("Occupation created: {}", saved);
+        log.info("Occupation created for {}", saved.getClient().getFullName());
 
         return saved;
     }

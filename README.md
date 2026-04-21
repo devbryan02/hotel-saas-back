@@ -1,22 +1,22 @@
-# hotel-saas-back (catIN) — API SaaS Hotelera Multi‑Tenant
+# API SaaS Hotelera Multi‑Tenant
 
-Backend para un **sistema de gestión hotelera multi‑tenant** (Ayacucho, Perú).  
-Construido con **Spring Boot + Spring Security (JWT) + JPA + Flyway + PostgreSQL**, con una estructura orientada a separar **dominio** y **adaptadores** (persistencia/seguridad).
-
+Backend para un **sistema de gestión hotelera multi‑tenant** orientado a hoteles/negocios en Ayacucho, Perú.  
+Construido con **Java 21** y **Spring Boot 4.0.2**, con autenticación **stateless (JWT)**, persistencia **PostgreSQL + JPA**, migraciones **Flyway**, y un stack de **observabilidad (Prometheus + Grafana)** listo vía Docker Compose.
 ---
 
 ## Qué demuestra este proyecto (para recruiters)
 
-- **Diseño Multi‑Tenant**: el modelo de datos y las entidades están pensadas para aislar información por `tenant_id`.
-- **Autenticación Stateless con JWT**:
-  - filtro custom `JwtAuthFilter`
-  - servicio `JwtService`
-  - token con *claims* útiles para autorización multi‑tenant
-- **Autorización por roles (RBAC)** con reglas explícitas en `SecurityConfig`.
-- **Persistencia con Spring Data JPA** + entidades JPA.
-- **Versionado de DB con Flyway** (migraciones SQL).
-- **Configuración por perfiles** (`dev` / `prod`) usando variables de entorno (12-factor style).
-- **Dockerización** (Dockerfile + docker-compose) y build reproducible (`app.jar`).
+- **Multi‑Tenant**: diseño de datos aislado por `tenant_id` para soportar múltiples hoteles/empresas en un solo backend.
+- **Arquitectura por capas (estilo Clean/Hexagonal)**: separación clara entre *domain* y *adapters* (web/persistencia/seguridad).
+- **Spring Security + JWT (Stateless)**:
+   - filtro custom `JwtAuthFilter`
+   - servicio `JwtService`
+   - claims incluyendo `tenantId` para autorización multi‑tenant
+- **RBAC (Role-Based Access Control)**: reglas explícitas por rutas en `SecurityConfig`.
+- **Persistencia y calidad de datos**: Spring Data JPA + Validation.
+- **Migraciones SQL versionadas**: Flyway.
+- **Observabilidad real**: Actuator + métricas Prometheus + dashboards con Grafana.
+- **DevOps readiness**: Dockerfile multi-stage y Docker Compose con DB + App + Observabilidad.
 
 ---
 
@@ -24,39 +24,68 @@ Construido con **Spring Boot + Spring Security (JWT) + JPA + Flyway + PostgreSQL
 
 - **Java 21**
 - **Spring Boot 4.0.2**
-- Spring Web MVC
-- Spring Data JPA (Hibernate)
-- Spring Security (JWT)
+   - Spring Web MVC
+   - Spring Data JPA (Hibernate)
+   - Spring Security
+   - Validation
+   - Actuator
 - **PostgreSQL**
 - **Flyway** (migraciones SQL)
-- MapStruct + Lombok
-- Docker + Docker Compose
+- **JWT** (`io.jsonwebtoken`)
+- **MapStruct** + **Lombok**
+- **OpenAPI/Swagger UI**: `springdoc-openapi-starter-webmvc-ui`
+- **Rate limiting**: Bucket4j
+- **Observabilidad**: Micrometer + Prometheus + Grafana
+- **Docker / Docker Compose**
 
 ---
+## Estructura del proyecto
 
-## Estructura técnica (visión rápida)
+Resumen de carpetas principales:
 
-Paquete base:
-- `com.app.hotelsaas.catin`
+```text
+hotel-saas-back/
+├─ src/
+│  ├─ main/
+│  │  ├─ java/
+│  │  │  └─ (código fuente)
+│  │  │     ├─ application/        # casos de uso / lógica de aplicación
+│  │  │     ├─ domain/             # lógica de negocio (modelos + contratos)
+│  │  │     ├─ infrastructure/     # adaptadores (persistencia, seguridad, integraciones)
+│  │  │     └─ web/                # API REST (controllers, DTOs, etc.)
+│  │  └─ resources/
+│  │     ├─ application.yaml
+│  │     ├─ application-dev.yaml
+│  │     ├─ application-prod.yaml
+│  │     └─ database/
+│  │        └─ migration/          # scripts Flyway (V1__, V2__, V3__...)
+│  └─ test/
+│     └─ (tests)
+├─ observability/
+│  └─ prometheus.yml               # configuración de Prometheus
+├─ Dockerfile
+├─ docker-compose.yml
+├─ docker-compose-prod.yml
+├─ build.gradle.kts
+└─ README.md
+```
 
-Punto de entrada:
-- `src/main/java/com/app/hotelsaas/catin/CatInApplication.java` (`@SpringBootApplication`, `@EnableScheduling`)
+Tabla rápida
 
-Separación por capas (alto nivel):
-- **Domain**
-  - `domain/model`: modelos de negocio (ej. `Tenant`)
-  - `domain/port`: contratos/interfaces (ej. `TenantRepository`)
-- **Infrastructure**
-  - `infrastructure/persistence`: entidades JPA, repositorios, mappers (MapStruct)
-  - `infrastructure/security`: configuración de seguridad + JWT
-
-> Esta separación busca evitar acoplar el dominio al framework y hace más mantenible el crecimiento del proyecto.
-
+| Área            | Carpeta           | Qué contiene                      |
+|-----------------|-------------------|-----------------------------------|
+| Negocio         | `domain/`         | modelos + contratos (core)        |
+| Casos de uso    | `application/`    | servicios / orquestación          |
+| Infraestructura | `infrastructure/` | persistencia, seguridad, etc.     |
+| API             | `web/`            | controllers y DTOs                |
+| Config          | `resources/`      | profiles + migraciones Flyway     |
+| Observabilidad  | `observability/`  | config de Prometheus              |
+| DevOps          | raíz del repo     | Dockerfile/compose + build Gradle |
 ---
 
 ## Multi‑Tenant (cómo está resuelto)
 
-A nivel de base de datos (ver `V1__init_schema.sql`), las tablas principales están relacionadas a `tenant` mediante `tenant_id`:
+A nivel de base de datos, las entidades principales se relacionan con `tenant` a través de `tenant_id` (ver migración inicial `V1__init_schema.sql`). Tablas relevantes:
 
 - `tenant`
 - `client` → `tenant_id`
@@ -72,41 +101,44 @@ Esto permite:
 
 ## Seguridad (JWT + RBAC)
 
-### JWT (token)
-El token se firma y contiene:
+### JWT
+El token contiene:
 - `subject`: email del usuario
-- *claims*:
-  - `userId`
-  - `tenantId`
-  - `role`
+- claims:
+   - `userId`
+   - `tenantId`
+   - `role`
 
-Header esperado:
+Header:
 - `Authorization: Bearer <jwt>`
 
 ### Flujo
 - `JwtAuthFilter` intercepta requests, valida el token y setea el `SecurityContext`.
 - La app opera **stateless** (`SessionCreationPolicy.STATELESS`).
 
-### Reglas por rutas (RBAC)
-En `SecurityConfig`:
-- Públicas:
-  - `/auth/**`
-- Protegidas por rol:
-  - `/tenants/*/rooms/**` → `ADMIN` o `RECEPTIONIST`
-  - `/tenants/*/clients/**` → `ADMIN` o `RECEPTIONIST`
-  - `/tenants/*/occupations/**` → `ADMIN` o `RECEPTIONIST`
-- Cualquier otra ruta requiere autenticación.
+### RBAC por rutas (SecurityConfig)
+
+| Tipo de acceso | Rutas | Roles permitidos |
+|---|---|---|
+| Público | `/auth/**` | — |
+| Protegido | `/tenants/*/rooms/**` | `ADMIN`, `RECEPTIONIST` |
+| Protegido | `/tenants/*/clients/**` | `ADMIN`, `RECEPTIONIST` |
+| Protegido | `/tenants/*/occupations/**` | `ADMIN`, `RECEPTIONIST` |
+| Por defecto | Cualquier otra ruta | Requiere autenticación |
 
 ### CORS
-- Origen permitido: `app.front.url`
-- Métodos: `GET, POST, PUT, DELETE, PATCH, OPTIONS`
-- Expuestos: `Authorization`
+
+| Configuración | Valor |
+|---|---|
+| Origen permitido | `app.front.url` |
+| Métodos permitidos | `GET, POST, PUT, DELETE, PATCH, OPTIONS` |
+| Headers expuestos | `Authorization` |
 
 ---
 
 ## Base URL / Versionado de API
 
-Se usa prefijo de API:
+Prefijo global:
 - `spring.mvc.servlet.path: "/api/v1"`
 
 Base URL:
@@ -116,32 +148,85 @@ Base URL:
 
 ## Configuración (profiles + env vars)
 
-Perfil activo por defecto:
-- `src/main/resources/application.yaml` → `spring.profiles.active: dev`
+Profile activo por defecto:
+- `spring.profiles.active: dev`
 
 ### Variables de entorno
 
-**Servidor**
-- `PORT` (default `8080`)
+| Variable                     | Descripción                                              |
+|------------------------------|----------------------------------------------------------|
+| `PORT`                       | Puerto donde corre la API (si no se define, usa `8080`). |
+| `PGHOST`                     | Host de PostgreSQL.                                      |
+| `PGPORT`                     | Puerto de PostgreSQL.                                    |
+| `PGDATABASE`                 | Nombre de la base de datos.                              |
+| `PGUSER`                     | Usuario de PostgreSQL.                                   |
+| `PGPASSWORD`                 | Contraseña de PostgreSQL.                                |
+| `JWT_SECRET`                 | Secreto usado para firmar y validar tokens JWT.          |
+| `ADMIN_API_KEY`              | API key para operaciones administrativas.                |
+| `GF_SECURITY_ADMIN_PASSWORD` | Contraseña del usuario admin de Grafana.                 |
+| `app.front.url`              | Origen permitido para CORS (URL del frontend).           |
 
-**PostgreSQL**
-- `PGHOST`
-- `PGPORT`
-- `PGDATABASE`
-- `PGUSER`
-- `PGPASSWORD`
+---
 
-**JWT**
-- `JWT_SECRET` (obligatorio)
-- `jwt.expiration` = `86400000` ms (24h)
+## Docker Compose (Stack completo: App + DB + Observabilidad)
 
-**Admin**
-- `ADMIN_API_KEY`
+El proyecto incluye un entorno *local/dev* levantable con **Docker Compose**, que orquesta:
 
-**Frontend (CORS)**
-- `app.front.url`
-  - DEV: `http://localhost:3000`
-  - PROD: `https://zowy.vercel.app/`
+- **PostgreSQL 16** (base de datos)
+- **hotel-saas-back** (Spring Boot API)
+- **Prometheus** (scraping de métricas vía Actuator/Micrometer)
+- **Grafana** (dashboards para visualizar métricas)
+
+### Servicios
+
+- **db** (`postgres:16`)
+   - Persiste datos con volumen `postgres_data`.
+   - Expone `5432:5432`.
+
+- **app** (build desde el repo)
+   - Expone `8080:8080`.
+   - Usa variables de entorno para DB, JWT y API key admin.
+   - Depende de `db`.
+
+- **prometheus** (`prom/prometheus:latest`)
+   - Expone `9090:9090`.
+   - Monta configuración desde `./observability/prometheus.yml`.
+   - Depende de `app`.
+
+- **grafana** (`grafana/grafana:latest`)
+   - Expone `3000:3000`.
+   - Persiste configuración/dashboards en `grafana_data`.
+   - Depende de `prometheus`.
+   - Password admin por env: `GF_SECURITY_ADMIN_PASSWORD`.
+
+### Levantar el stack
+
+```bash
+docker compose up --build
+```
+
+### Puertos (por defecto)
+
+- API: `http://localhost:8080/api/v1`
+- PostgreSQL: `localhost:5432`
+- Prometheus: `http://localhost:9090`
+- Grafana: `http://localhost:3000`
+
+### Variables de entorno requeridas (compose)
+
+- **PostgreSQL**
+   - `PGUSER`
+   - `PGPASSWORD`
+   - `PGDATABASE`
+   - `PGHOST`
+   - `PGPORT`
+
+- **JWT / Seguridad**
+   - `JWT_SECRET`
+   - `ADMIN_API_KEY`
+
+- **Grafana**
+   - `GF_SECURITY_ADMIN_PASSWORD`
 
 ---
 
@@ -171,12 +256,13 @@ docker compose up --build
 
 ## Migraciones (Flyway)
 
-- habilitado: `spring.flyway.enabled: true`
 - ubicación: `classpath:database/migration`
 - `baseline-on-migrate: true`
 
-Migración inicial:
+Migraciones incluidas:
 - `V1__init_schema.sql`
+- `V2__add_client_last_stay.sql`
+- `V3__add_column_finished_date.sql`
 
 ---
 
@@ -187,12 +273,8 @@ Genera `app.jar`:
 ./gradlew clean build
 ```
 
+Dockerfile (multi-stage) compila y ejecuta:
+- build: `./gradlew clean bootJar -x test`
+- run: `java -jar app.jar`
+
 ---
-
-## Próximos pasos (mejoras técnicas planificadas)
-
-- Documentación de endpoints con ejemplos `curl` (Auth, Rooms, Clients, Occupations)
-- OpenAPI/Swagger (`springdoc-openapi`)
-- Tests de integración con Postgres (Testcontainers)
-- Manejo global de errores + respuestas estándar
-- Auditoría/logs de acciones administrativas
