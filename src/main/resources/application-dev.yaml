@@ -1,3 +1,5 @@
+
+
 server:
   port: ${PORT:8080}
 
@@ -38,7 +40,7 @@ management:
       enabled: true
   metrics:
     tags:
-      application: ${spring.application.name}
+      application: catIN
       environment: dev
 
 jwt:
