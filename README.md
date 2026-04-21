@@ -2,9 +2,10 @@
 
 Backend para un **sistema de gestión hotelera multi‑tenant** orientado a hoteles/negocios en Ayacucho, Perú.  
 Construido con **Java 21** y **Spring Boot 4.0.2**, con autenticación **stateless (JWT)**, persistencia **PostgreSQL + JPA**, migraciones **Flyway**, y un stack de **observabilidad (Prometheus + Grafana)** listo vía Docker Compose.
+
 ---
 
-## Qué demuestra este proyecto (para recruiters)
+## Qué demuestra este proyecto
 
 - **Multi‑Tenant**: diseño de datos aislado por `tenant_id` para soportar múltiples hoteles/empresas en un solo backend.
 - **Arquitectura por capas (estilo Clean/Hexagonal)**: separación clara entre *domain* y *adapters* (web/persistencia/seguridad).
@@ -118,21 +119,21 @@ Header:
 
 ### RBAC por rutas (SecurityConfig)
 
-| Tipo de acceso | Rutas | Roles permitidos |
-|---|---|---|
-| Público | `/auth/**` | — |
-| Protegido | `/tenants/*/rooms/**` | `ADMIN`, `RECEPTIONIST` |
-| Protegido | `/tenants/*/clients/**` | `ADMIN`, `RECEPTIONIST` |
-| Protegido | `/tenants/*/occupations/**` | `ADMIN`, `RECEPTIONIST` |
-| Por defecto | Cualquier otra ruta | Requiere autenticación |
+| Tipo de acceso | Rutas                       | Roles permitidos        |
+|----------------|-----------------------------|-------------------------|
+| Público        | `/auth/**`                  | —                       |
+| Protegido      | `/tenants/*/rooms/**`       | `ADMIN`, `RECEPTIONIST` |
+| Protegido      | `/tenants/*/clients/**`     | `ADMIN`, `RECEPTIONIST` |
+| Protegido      | `/tenants/*/occupations/**` | `ADMIN`, `RECEPTIONIST` |
+| Por defecto    | Cualquier otra ruta         | Requiere autenticación  |
 
 ### CORS
 
-| Configuración | Valor |
-|---|---|
-| Origen permitido | `app.front.url` |
+| Configuración      | Valor                                    |
+|--------------------|------------------------------------------|
+| Origen permitido   | `app.front.url`                          |
 | Métodos permitidos | `GET, POST, PUT, DELETE, PATCH, OPTIONS` |
-| Headers expuestos | `Authorization` |
+| Headers expuestos  | `Authorization`                          |
 
 ---
 
