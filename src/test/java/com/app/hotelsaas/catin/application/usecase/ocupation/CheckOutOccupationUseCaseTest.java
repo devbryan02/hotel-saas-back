@@ -65,7 +65,7 @@ class CheckOutOccupationUseCaseTest {
         ocupacionActiva = new Occupation(
                 occupationId, tenant, cliente, roomOcupada,
                 LocalDate.now().minusDays(3), LocalDate.now(),
-                "ACTIVE", BigDecimal.valueOf(240.00), LocalDateTime.now()
+                "ACTIVE", BigDecimal.valueOf(240.00), LocalDateTime.now(), null
         );
     }
 
@@ -140,7 +140,7 @@ class CheckOutOccupationUseCaseTest {
             Occupation ocupacionFinalizada = new Occupation(
                     occupationId, tenant, cliente, roomOcupada,
                     LocalDate.now().minusDays(3), LocalDate.now(),
-                    "FINISHED", BigDecimal.valueOf(240.00), LocalDateTime.now()
+                    "FINISHED", BigDecimal.valueOf(240.00), LocalDateTime.now(), null
             );
 
             when(entityFinder.findOccupation(tenantId, occupationId)).thenReturn(ocupacionFinalizada);
@@ -162,7 +162,7 @@ class CheckOutOccupationUseCaseTest {
             Occupation ocupacionCancelada = new Occupation(
                     occupationId, tenant, cliente, roomOcupada,
                     LocalDate.now().minusDays(3), LocalDate.now(),
-                    "CANCELLED", BigDecimal.valueOf(240.00), LocalDateTime.now()
+                    "CANCELLED", BigDecimal.valueOf(240.00), LocalDateTime.now(), null
             );
 
             when(entityFinder.findOccupation(tenantId, occupationId)).thenReturn(ocupacionCancelada);

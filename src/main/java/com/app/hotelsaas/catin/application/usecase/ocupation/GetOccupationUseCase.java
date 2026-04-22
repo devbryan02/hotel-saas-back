@@ -27,8 +27,8 @@ public class GetOccupationUseCase {
         return occupationRepository.findAllByTenantId(tenantId, page, size);
     }
 
-    public Occupation findByTenantIdAndId(UUID id, UUID tenantId){
-        return entityFinder.findOccupation(id, tenantId);
+    public Occupation findByTenantIdAndId(UUID tenantId, UUID occupationId){
+        return entityFinder.findOccupation(tenantId, occupationId);
     }
 
 }

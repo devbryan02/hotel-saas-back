@@ -30,6 +30,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final TenantAccessFilter tenantAccessFilter;
     private final RateLimitFilter rateLimitFilter;
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -46,7 +47,8 @@ public class SecurityConfig {
                                 // ─── RUTAS PÚBLICAS
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/actuator/**").permitAll()
+                                .requestMatchers("/actuator/health/**").permitAll()
+                                .requestMatchers("/actuator/prometheus/**").permitAll()
                                 .requestMatchers(
                                         "/v3/api-docs/**",
                                         "/v2/api-docs/**",
@@ -55,6 +57,7 @@ public class SecurityConfig {
                                         "/swagger-ui.html",
                                         "/webjars/**"
                                 ).permitAll()
+                                .requestMatchers("/actuator/**").hasRole("ADMIN")
 
                                 // ─── RUTAS PROTEGIDAS POR ROL
                                 .requestMatchers("/tenants/*/rooms/**").hasAnyRole("ADMIN", "RECEPTIONIST")
@@ -75,8 +78,12 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .addFilterAfter(
-                        rateLimitFilter,
+                        tenantAccessFilter,
                         JwtAuthFilter.class
+                )
+                .addFilterAfter(
+                        rateLimitFilter,
+                        TenantAccessFilter.class
                 );
 
         return http.build();
@@ -108,7 +115,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedOrigins(List.of(appFrontUrl));
         config.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
         );

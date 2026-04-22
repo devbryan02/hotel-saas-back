@@ -84,7 +84,8 @@ class CreateOccupationUseCaseTest {
 
         requestValido = new CreateOccupationRequest(
                 LocalDate.now(),
-                LocalDate.now().plusDays(3)
+                LocalDate.now().plusDays(3),
+                null
         );
     }
 
@@ -125,7 +126,8 @@ class CreateOccupationUseCaseTest {
             LocalDate mismaFecha = LocalDate.now();
             CreateOccupationRequest requestFechasIguales = new CreateOccupationRequest(
                     mismaFecha,
-                    mismaFecha
+                    mismaFecha,
+                    null
             );
 
             assertThatThrownBy(() ->
@@ -143,7 +145,8 @@ class CreateOccupationUseCaseTest {
 
             CreateOccupationRequest requestFechasInvertidas = new CreateOccupationRequest(
                     LocalDate.now().plusDays(3),
-                    LocalDate.now()
+                    LocalDate.now(),
+                    null
             );
 
             assertThatThrownBy(() ->
@@ -211,7 +214,8 @@ class CreateOccupationUseCaseTest {
 
             CreateOccupationRequest requestUnaNoche = new CreateOccupationRequest(
                     LocalDate.now(),
-                    LocalDate.now().plusDays(1)
+                    LocalDate.now().plusDays(1),
+                    null
             );
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);
@@ -231,7 +235,8 @@ class CreateOccupationUseCaseTest {
 
             CreateOccupationRequest requestSieteNoches = new CreateOccupationRequest(
                     LocalDate.now(),
-                    LocalDate.now().plusDays(7)
+                    LocalDate.now().plusDays(7),
+                    null
             );
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);

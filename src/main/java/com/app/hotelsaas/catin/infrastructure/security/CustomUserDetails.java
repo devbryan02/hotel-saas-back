@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.infrastructure.security;
 
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +18,13 @@ public class CustomUserDetails implements UserDetails {
         this.tenantId = tenantId;
     }
 
+    @NullMarked
     public UUID getTenantId() {
         return tenantId;
     }
 
     @Override
+    @NullMarked
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return delegate.getAuthorities();
     }
@@ -32,6 +35,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
+    @NullMarked
     public String getUsername() {
         return delegate.getUsername();
     }
