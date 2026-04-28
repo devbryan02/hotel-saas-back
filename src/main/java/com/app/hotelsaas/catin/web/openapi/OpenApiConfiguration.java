@@ -5,11 +5,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 public class OpenApiConfiguration {
@@ -25,10 +22,10 @@ public class OpenApiConfiguration {
                         .description("API para gestión de hoteles multi-tenant")
                         .version("1.0.0"))
 
-                .servers(List.of(
+                /*.servers(List.of(
                         new Server().url("https://hotel.bryandev.online")
                                 .description("Servidor en producción por tunel")
-                ))
+                ))*/
 
                 .addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))
