@@ -50,6 +50,13 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
 
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: hotel_tunnel
+    restart: always
+    command: tunnel --no-autoupdate run --token ${CF_TUNNEL_TOKEN}
+
 volumes:
   postgres_data:
   grafana_data:
+
