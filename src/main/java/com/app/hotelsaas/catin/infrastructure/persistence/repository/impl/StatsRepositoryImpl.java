@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.infrastructure.persistence.repository.impl;
 
+import com.app.hotelsaas.catin.domain.enums.RoomStatus;
 import com.app.hotelsaas.catin.domain.model.DashboardStats;
 import com.app.hotelsaas.catin.domain.port.StatsRepository;
 import com.app.hotelsaas.catin.infrastructure.persistence.repository.jpa.OccupationJpaRepository;
@@ -30,10 +31,10 @@ public class StatsRepositoryImpl implements StatsRepository {
 
         // ── Rooms ──────────────────────────────────────────
         long totalRooms       = roomJpa.countByTenantId(tenantId);
-        long availableRooms   = roomJpa.countByTenantIdAndStatus(tenantId, "AVAILABLE");
-        long occupiedRooms    = roomJpa.countByTenantIdAndStatus(tenantId, "OCCUPIED");
-        long maintenanceRooms = roomJpa.countByTenantIdAndStatus(tenantId, "MAINTENANCE");
-        long cleaningRooms    = roomJpa.countByTenantIdAndStatus(tenantId, "CLEANING");
+        long availableRooms   = roomJpa.countByTenantIdAndStatus(tenantId, RoomStatus.AVAILABLE);
+        long occupiedRooms    = roomJpa.countByTenantIdAndStatus(tenantId, RoomStatus.OCCUPIED);
+        long maintenanceRooms = roomJpa.countByTenantIdAndStatus(tenantId, RoomStatus.MAINTENANCE);
+        long cleaningRooms    = roomJpa.countByTenantIdAndStatus(tenantId, RoomStatus.CLEANING);
 
         // ── Occupations ────────────────────────────────────
         long activeOccupations = occupationJpa.countByTenantIdAndStatus(tenantId, "ACTIVE");

@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.domain.model;
 
+import com.app.hotelsaas.catin.domain.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,12 +17,12 @@ public class AppUser {
     private Tenant tenant;
     private String email;
     private String passwordHash;
-    private String role;
+    private RoleEnum role;
     private String status;
     private LocalDateTime createdAt;
 
-    public static AppUser create(Tenant tenant, String email, String passwordHash, String role){
-        return new AppUser(null, tenant, email, passwordHash, role, "ACTIVE", LocalDateTime.now());
+    public static AppUser create(Tenant tenant, String email, String passwordHash, RoleEnum role ){
+        return new AppUser(null, tenant, email, passwordHash, role, "ACTIVE", LocalDateTime.now()
+        );
     }
-
 }

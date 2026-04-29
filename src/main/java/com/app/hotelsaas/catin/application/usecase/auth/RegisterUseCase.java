@@ -1,6 +1,7 @@
 package com.app.hotelsaas.catin.application.usecase.auth;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
+import com.app.hotelsaas.catin.domain.enums.RoleEnum;
 import com.app.hotelsaas.catin.domain.model.AppUser;
 import com.app.hotelsaas.catin.domain.model.Tenant;
 import com.app.hotelsaas.catin.domain.port.AppUserRepository;
@@ -20,13 +21,14 @@ public class RegisterUseCase {
     private final PasswordEncoder passwordEncoder;
 
     public AppUser execute(RegisterRequest request) {
+
         Tenant tenant = entityFinder.findTenant(request.tenantId());
 
         AppUser appUser = AppUser.create(
             tenant,
             request.email(),
             passwordEncoder.encode(request.password()),
-            request.role()
+            RoleEnum.ADMIN
         );
 
         AppUser saved = appUserRepository.save(appUser);

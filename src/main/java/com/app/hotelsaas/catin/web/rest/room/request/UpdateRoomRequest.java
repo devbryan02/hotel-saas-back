@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.web.rest.room.request;
 
+import com.app.hotelsaas.catin.domain.enums.RoomStatus;
 import jakarta.validation.constraints.*;
 
 public record UpdateRoomRequest(
@@ -20,7 +21,7 @@ public record UpdateRoomRequest(
         Double pricePerNight,
 
         @NotBlank
-        String status
+        RoomStatus status
 
 ) {
 }

@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.infrastructure.persistence.Entity;
 
+import com.app.hotelsaas.catin.domain.enums.RoomStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,5 +27,7 @@ public class RoomEntity {
     private String roomNumber;
     private String roomType;
     private BigDecimal pricePerNight;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private RoomStatus status;
 }

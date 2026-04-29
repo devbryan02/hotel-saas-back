@@ -29,9 +29,7 @@ public class CreateRoomUseCase {
 
         if (roomRepository.existsByRoomNumberAndTenantId(request.roomNumber(), tenantId)) {
             log.warn("Room with roomNumber {} already exists", request.roomNumber());
-            throw new DuplicateRoomException("Room with roomNumber " + request.roomNumber() +
-                    " already exists"
-            );
+            throw new DuplicateRoomException("Room with roomNumber " + request.roomNumber() + " already exists");
         }
 
         Room room = Room.create(

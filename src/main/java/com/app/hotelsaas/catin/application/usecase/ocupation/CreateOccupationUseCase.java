@@ -1,6 +1,7 @@
 package com.app.hotelsaas.catin.application.usecase.ocupation;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
+import com.app.hotelsaas.catin.domain.enums.RoomStatus;
 import com.app.hotelsaas.catin.domain.exception.InvalidOccupationDatesException;
 import com.app.hotelsaas.catin.domain.exception.RoomNotAvailableException;
 import com.app.hotelsaas.catin.domain.model.Client;
@@ -31,16 +32,19 @@ public class CreateOccupationUseCase {
     @Transactional
     public Occupation execute(UUID tenantId, UUID roomId, UUID clientId, CreateOccupationRequest request) {
 
+        // valida que la fecha de check-out sea mayor a la fecha de check-in
         if (!request.checkOutDate().isAfter(request.checkInDate())) {
             log.warn("Check-out date must be after check-in date");
             throw new InvalidOccupationDatesException("Check-out date must be after check-in date");
         }
 
+        // Busca las entidades
         Tenant tenant = entityFinder.findTenant(tenantId);
         Room room = entityFinder.findRoom(tenantId, roomId);
         Client client = entityFinder.findClient(tenantId, clientId);
 
-        if (!"AVAILABLE".equals(room.getStatus())) {
+        // Valida que la habitacion no este ocupada
+        if (room.getStatus() == RoomStatus.OCCUPIED) {
             log.warn("Room is not available. Current status: {}", room.getStatus());
             throw new RoomNotAvailableException("Room is not available. Current status: " + room.getStatus());
         }
@@ -56,9 +60,11 @@ public class CreateOccupationUseCase {
             log.info("Calculated totalPrice: {} ({} days x {})", totalPrice, days, room.getPricePerNight());
         }
 
+        // Cambia el status de la habitacion a ocupada
         Room occupiedRoom  = room.occupy();
         roomRepository.save(occupiedRoom);
 
+        // Crea la ocupacion
         Occupation occupation = Occupation.create(
                 tenant, client, occupiedRoom,
                 request.checkInDate(),
@@ -66,6 +72,7 @@ public class CreateOccupationUseCase {
                 totalPrice
         );
 
+        // Guarda la ocupacion en la base de datos
         Occupation saved = occupationRepository.save(occupation);
         log.info("Occupation created for {}", saved.getClient().getFullName());
 
