@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.infrastructure.persistence.Entity;
 
+import com.app.hotelsaas.catin.domain.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +26,9 @@ public class AppUserEntity {
 
     private String email;
     private String passwordHash;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
     private String status;
     private LocalDateTime createdAt;
 

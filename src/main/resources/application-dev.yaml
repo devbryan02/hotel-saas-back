@@ -50,4 +50,4 @@ admin:
 
 app:
   front:
-    url: https://hotel.bryandev.online/
+    url: http://localhost:3000

@@ -39,7 +39,7 @@ public class LoginUseCase {
                 appUser.getId(),
                 appUser.getEmail(),
                 appUser.getTenant().getId(),
-                appUser.getRole()
+                appUser.getRole().name()
         );
 
         log.info("User logged in: {}", appUser.getEmail());
@@ -47,7 +47,7 @@ public class LoginUseCase {
         return new AuthResponse(
                 token,
                 appUser.getEmail(),
-                appUser.getRole(),
+                appUser.getRole().name(),
                 appUser.getTenant().getId().toString()
         );
 

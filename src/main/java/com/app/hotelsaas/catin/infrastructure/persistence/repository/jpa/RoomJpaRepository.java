@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.infrastructure.persistence.repository.jpa;
 
+import com.app.hotelsaas.catin.domain.enums.RoomStatus;
 import com.app.hotelsaas.catin.infrastructure.persistence.Entity.RoomEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,6 +15,6 @@ public interface RoomJpaRepository extends JpaRepository<RoomEntity, UUID> {
     Optional<RoomEntity> findByTenantIdAndId(UUID tenantId, UUID roomId);
     List<RoomEntity> findAllByTenantId(UUID tenantId);
     long countByTenantId(UUID tenantId);
-    long countByTenantIdAndStatus(UUID tenantId, String status);
+    long countByTenantIdAndStatus(UUID tenantId, RoomStatus status);
 
 }

@@ -19,13 +19,11 @@ public class RoomRestMapper {
             room.getRoomNumber(),
             room.getRoomType(),
             room.getPricePerNight(),
-            room.getStatus()
+            room.getStatus().name()
         );
     }
 
-    public List<RoomListItemResponse> toListItemResponses(
-        List<RoomWithOccupation> rooms
-    ) {
+    public List<RoomListItemResponse> toListItemResponses(List<RoomWithOccupation> rooms) {
         return rooms.stream().map(this::toListItemResponse).toList();
     }
 
@@ -48,7 +46,7 @@ public class RoomRestMapper {
             rwo.room().getRoomNumber(),
             rwo.room().getRoomType(),
             rwo.room().getPricePerNight(),
-            rwo.room().getStatus(),
+            rwo.room().getStatus().name(),
             clientResponse
         );
     }

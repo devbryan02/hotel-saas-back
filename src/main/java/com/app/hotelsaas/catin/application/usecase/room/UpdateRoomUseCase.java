@@ -21,33 +21,18 @@ public class UpdateRoomUseCase {
     private final EntityFinder entityFinder;
 
     public Room execute(UUID tenantId, UUID roomId, UpdateRoomRequest request) {
+
         Room room = entityFinder.findRoom(tenantId, roomId);
 
-        if (
-            roomRepository.existsByRoomNumberAndTenantIdAndIdNot(
-                request.roomNumber(),
-                tenantId,
-                roomId
-            )
-        ) {
-            log.warn(
-                "Room with roomNumber {} already exists",
-                request.roomNumber()
-            );
-            throw new DuplicateRoomException(
-                "Room with roomNumber " +
-                    request.roomNumber() +
-                    " already exists"
-            );
+        if (roomRepository.existsByRoomNumberAndTenantIdAndIdNot(request.roomNumber(), tenantId, roomId)) {
+            log.warn("Room with roomNumber {} already exists", request.roomNumber());
+            throw new DuplicateRoomException("Room with roomNumber " + request.roomNumber() + " already exists");
         }
 
         Room updated = room.update(
             request.roomNumber(),
             request.roomType(),
-            BigDecimal.valueOf(request.pricePerNight()).setScale(
-                2,
-                RoundingMode.HALF_UP
-            ),
+            BigDecimal.valueOf(request.pricePerNight()).setScale(2, RoundingMode.HALF_UP),
             request.status()
         );
 

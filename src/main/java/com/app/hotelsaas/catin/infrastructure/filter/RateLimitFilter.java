@@ -51,7 +51,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
                 log.info("Tenant {} has {} requests left", tenantId, bucket.getAvailableTokens());
                 filterChain.doFilter(request, response);
             } else {
-
                 log.warn("RATE LIMIT EXCEEDED for tenant {}", tenantId);
                 response.setStatus(429);
                 response.setContentType("application/json");

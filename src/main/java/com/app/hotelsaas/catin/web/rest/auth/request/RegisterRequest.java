@@ -15,8 +15,5 @@ public record RegisterRequest(
         String email,
 
         @NotBlank(message = "La contraseña es obligatoria")
-        String password,
-
-        @NotBlank(message = "El rol es obligatorio")
-        String role
+        String password
 ) {}
