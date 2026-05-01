@@ -27,7 +27,7 @@ public class OccupationRestMapper {
                 occupation.getRoom().getPricePerNight(),
                 nights,
                 occupation.getTotalPrice(),
-                occupation.getStatus(),
+                occupation.getStatus().name(),
                 occupation.getCreatedAt()
         );
     }
@@ -49,7 +49,7 @@ public class OccupationRestMapper {
                             nights,
                             o.getRoom().getPricePerNight(),
                             o.getTotalPrice(),
-                            o.getStatus()
+                            o.getStatus().name()
                     );
                 });
     }

@@ -25,18 +25,18 @@ public class RegisterUseCase {
         Tenant tenant = entityFinder.findTenant(request.tenantId());
 
         AppUser appUser = AppUser.create(
-            tenant,
-            request.email(),
-            passwordEncoder.encode(request.password()),
-            RoleEnum.ADMIN
+                tenant,
+                request.email(),
+                passwordEncoder.encode(request.password()),
+                RoleEnum.ADMIN
         );
 
         AppUser saved = appUserRepository.save(appUser);
         log.info(
-            "AppUser created: {}, role: {}, tenant: {}",
-            saved.getEmail(),
-            saved.getRole(),
-            tenant.getName()
+                "AppUser created: {}, role: {}, tenant: {}",
+                saved.getEmail(),
+                saved.getRole(),
+                tenant.getName()
         );
 
         return saved;
