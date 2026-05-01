@@ -25,13 +25,13 @@ public class CreateClientUseCase {
      * Executes transactional client creation; persists and returns result
      */
     @Transactional
-    public Client execute(UUID tenantId, CreateClientRequest request){
+    public Client execute(UUID tenantId, CreateClientRequest request) {
 
         Tenant tenant = entityFinder.findTenant(tenantId);
 
-        if(clientRepository.existsByDocumentAndTenantId(request.document(), tenantId)){
+        if (clientRepository.existsByDocumentAndTenantId(request.document(), tenantId)) {
             log.warn("Client with document {} already exists", request.document());
-            throw new DuplicateClientException("Client with document "+request.document()+" already exists");
+            throw new DuplicateClientException("Client with document " + request.document() + " already exists");
         }
 
         Client client = Client.create(

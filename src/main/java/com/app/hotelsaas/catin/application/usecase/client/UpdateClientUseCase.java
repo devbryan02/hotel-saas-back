@@ -22,7 +22,7 @@ public class UpdateClientUseCase {
      * Updates client with request data; persists changes
      */
     @Transactional
-    public Client execute(UUID tenantId, UUID clientId, UpdateClientRequest request){
+    public Client execute(UUID tenantId, UUID clientId, UpdateClientRequest request) {
 
         Client client = clientRepository.findByTenantIdAndId(tenantId, clientId)
                 .orElseThrow(() -> {
