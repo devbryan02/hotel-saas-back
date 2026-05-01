@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.domain.model;
 
+import com.app.hotelsaas.catin.domain.enums.OccupationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,17 +21,17 @@ public class Occupation {
     private Room room;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private String status;
+    private OccupationStatus status;
     private BigDecimal totalPrice;
     private LocalDateTime createdAt;
     private LocalDateTime finishedAt;
 
-    public static Occupation create(Tenant tenant, Client client, Room room, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal totalPrice){
-        return new Occupation(null, tenant, client, room, checkInDate, checkOutDate, "ACTIVE", totalPrice, LocalDateTime.now(), null);
+    public static Occupation create(Tenant tenant, Client client, Room room, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal totalPrice) {
+        return new Occupation(null, tenant, client, room, checkInDate, checkOutDate, OccupationStatus.ACTIVE, totalPrice, LocalDateTime.now(), null);
     }
 
     public Occupation checkOut() {
-        return new Occupation(this.id, this.tenant, this.client, this.room, this.checkInDate, this.checkOutDate, "FINISHED", this.totalPrice, this.createdAt, LocalDateTime.now());
+        return new Occupation(this.id, this.tenant, this.client, this.room, this.checkInDate, this.checkOutDate, OccupationStatus.FINISHED, this.totalPrice, this.createdAt, LocalDateTime.now());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.infrastructure.persistence.Entity;
 
+import com.app.hotelsaas.catin.domain.enums.OccupationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +36,9 @@ public class OccupationEntity {
 
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private OccupationStatus status;
     private BigDecimal totalPrice;
     private LocalDateTime createdAt;
     private LocalDateTime finishedAt;

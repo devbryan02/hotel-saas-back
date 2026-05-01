@@ -1,6 +1,7 @@
 package com.app.hotelsaas.catin.application.usecase.ocupation;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
+import com.app.hotelsaas.catin.domain.enums.OccupationStatus;
 import com.app.hotelsaas.catin.domain.exception.OccupationNotActiveException;
 import com.app.hotelsaas.catin.domain.model.Client;
 import com.app.hotelsaas.catin.domain.model.Occupation;
@@ -30,7 +31,7 @@ public class CheckOutOccupationUseCase {
 
         Occupation occupation = entityFinder.findOccupation(tenantId, occupationId);
 
-        if(!"ACTIVE".equals(occupation.getStatus())) {
+        if(occupation.getStatus() == OccupationStatus.FINISHED) {
             log.warn("Occupation is not active");
             throw new OccupationNotActiveException("Occupation is not active. Current status: " + occupation.getStatus());
         }

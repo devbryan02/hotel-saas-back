@@ -21,8 +21,7 @@ public class LoginUseCase {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public AuthResponse execute(LoginRequest request){
-
+    public AuthResponse execute(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
@@ -30,8 +29,9 @@ public class LoginUseCase {
                 )
         );
 
-        AppUser appUser = appUserRepository.findByEmail(request.email())
-                .orElseThrow(() ->{
+        AppUser appUser = appUserRepository
+                .findByEmail(request.email())
+                .orElseThrow(() -> {
                     log.warn("User not found: {}", request.email());
                     return new UsernameNotFoundException("User not found");
                 });
@@ -50,6 +50,5 @@ public class LoginUseCase {
                 appUser.getRole().name(),
                 appUser.getTenant().getId().toString()
         );
-
     }
 }
