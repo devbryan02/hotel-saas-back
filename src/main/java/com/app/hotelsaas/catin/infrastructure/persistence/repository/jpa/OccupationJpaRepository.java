@@ -1,5 +1,6 @@
 package com.app.hotelsaas.catin.infrastructure.persistence.repository.jpa;
 
+import com.app.hotelsaas.catin.domain.enums.OccupationStatus;
 import com.app.hotelsaas.catin.infrastructure.persistence.Entity.OccupationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +36,7 @@ public interface OccupationJpaRepository extends JpaRepository<OccupationEntity,
             "AND o.status = 'ACTIVE'")
     List<OccupationEntity> findActiveByTenantId(@Param("tenantId") UUID tenantId);
 
-    long countByTenantIdAndStatus(UUID tenantId, String status);
+    long countByTenantIdAndStatus(UUID tenantId, OccupationStatus status);
     long countByTenantIdAndCheckInDate(UUID tenantId, LocalDate checkInDate);
 
     @Query("SELECT COUNT(o) FROM OccupationEntity o " +
