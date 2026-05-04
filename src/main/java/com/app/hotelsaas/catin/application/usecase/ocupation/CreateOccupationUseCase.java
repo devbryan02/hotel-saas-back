@@ -43,8 +43,8 @@ public class CreateOccupationUseCase {
         Room room = entityFinder.findRoom(tenantId, roomId);
         Client client = entityFinder.findClient(tenantId, clientId);
 
-        // Valida que la habitacion no este ocupada
-        if (room.getStatus() == RoomStatus.OCCUPIED) {
+        // Valida que la habitacion esté disponible
+        if (room.getStatus() != RoomStatus.AVAILABLE) {
             log.warn("Room is not available. Current status: {}", room.getStatus());
             throw new RoomNotAvailableException("Room is not available. Current status: " + room.getStatus());
         }

@@ -28,8 +28,7 @@ public class EntityFinder {
     private final OccupationRepository occupationRepository;
 
     public Tenant findTenant(UUID tenantId) {
-        return tenantRepository
-            .findById(tenantId)
+        return tenantRepository.findById(tenantId)
             .orElseThrow(() -> {
                 log.warn("Tenant not found: {}", tenantId);
                 return new TenantNotFoundException("Tenant not found");
@@ -37,28 +36,18 @@ public class EntityFinder {
     }
 
     public Room findRoom(UUID tenantId, UUID roomId) {
-        return roomRepository
-            .findByTenantIdAndId(tenantId, roomId)
+        return roomRepository.findByTenantIdAndId(tenantId, roomId)
             .orElseThrow(() -> {
                 log.warn("Room {} not found for tenant {}", roomId, tenantId);
-                return new RoomNotFoundException(
-                    "Room not found or not associated with tenant"
-                );
+                return new RoomNotFoundException("Room not found or not associated with tenant");
             });
     }
 
     public Client findClient(UUID tenantId, UUID clientId) {
-        return clientRepository
-            .findByTenantIdAndId(tenantId, clientId)
+        return clientRepository.findByTenantIdAndId(tenantId, clientId)
             .orElseThrow(() -> {
-                log.warn(
-                    "Client {} not found for tenant {}",
-                    clientId,
-                    tenantId
-                );
-                return new ClientNotFoundException(
-                    "Client not found or not associated with tenant"
-                );
+                log.warn("Client {} not found for tenant {}", clientId, tenantId);
+                return new ClientNotFoundException("Client not found or not associated with tenant");
             });
     }
 
@@ -66,14 +55,9 @@ public class EntityFinder {
         return occupationRepository
             .findByTenantIdAndId(tenantId, occupationId)
             .orElseThrow(() -> {
-                log.warn(
-                    "Occupation {} not found for tenant {}",
-                    occupationId,
-                    tenantId
+                log.warn("Occupation {} not found for tenant {}", occupationId, tenantId
                 );
-                return new OccupationNotFoundException(
-                    "Occupation not found or not associated with tenant"
-                );
+                return new OccupationNotFoundException("Occupation not found or not associated with tenant");
             });
     }
 }

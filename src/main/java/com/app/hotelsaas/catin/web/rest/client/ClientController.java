@@ -80,7 +80,7 @@ public class ClientController {
             @PathVariable UUID tenantId,
             @PathVariable UUID clientId
     ) {
-        Client client = getClientUseCase.findTenantIdAnId(tenantId, clientId);
+        Client client = getClientUseCase.findTenantIdAndId(tenantId, clientId);
         return ResponseEntity.ok(mapper.toDetailResponse(client));
     }
 

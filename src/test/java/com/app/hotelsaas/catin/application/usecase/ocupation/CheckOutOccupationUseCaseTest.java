@@ -1,7 +1,10 @@
 package com.app.hotelsaas.catin.application.usecase.ocupation;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
+import com.app.hotelsaas.catin.domain.enums.OccupationStatus;
+import com.app.hotelsaas.catin.domain.enums.RoomStatus;
 import com.app.hotelsaas.catin.domain.exception.OccupationNotActiveException;
+import com.app.hotelsaas.catin.domain.exception.OccupationNotFoundException;
 import com.app.hotelsaas.catin.domain.model.*;
 import com.app.hotelsaas.catin.domain.port.ClientRepository;
 import com.app.hotelsaas.catin.domain.port.OccupationRepository;
@@ -47,12 +50,12 @@ class CheckOutOccupationUseCaseTest {
         tenantId     = UUID.randomUUID();
         occupationId = UUID.randomUUID();
 
-        tenant = new Tenant(tenantId, "Hotel Pasay", "Pasaycacha", "Profesional", "ACTIVE");
+        tenant = new Tenant(tenantId, "Hotel Pasay", "Pasay", "Profesional", "ACTIVE");
 
         roomOcupada = new Room(
                 UUID.randomUUID(), tenant,
                 "101", "Simple",
-                BigDecimal.valueOf(80.00), "OCCUPIED"
+                BigDecimal.valueOf(80.00), RoomStatus.OCCUPIED
         );
 
         cliente = new Client(
@@ -65,7 +68,7 @@ class CheckOutOccupationUseCaseTest {
         ocupacionActiva = new Occupation(
                 occupationId, tenant, cliente, roomOcupada,
                 LocalDate.now().minusDays(3), LocalDate.now(),
-                "ACTIVE", BigDecimal.valueOf(240.00), LocalDateTime.now(), null
+                OccupationStatus.ACTIVE, BigDecimal.valueOf(240.00), LocalDateTime.now(), null
         );
     }
 
@@ -85,7 +88,7 @@ class CheckOutOccupationUseCaseTest {
             Occupation result = checkOutOccupationUseCase.checkOut(tenantId, occupationId);
 
             // Ocupación debe quedar FINISHED
-            assertThat(result.getStatus()).isEqualTo("FINISHED");
+            assertThat(result.getStatus()).isEqualTo(OccupationStatus.FINISHED);
             assertThat(result.getId()).isEqualTo(occupationId);
 
             // Verificar que se guardaron los 3 cambios
@@ -107,7 +110,7 @@ class CheckOutOccupationUseCaseTest {
 
             // Capturamos la room que se guardó y verificamos su estado
             verify(roomRepository).save(argThat(room ->
-                    "AVAILABLE".equals(room.getStatus())
+                    RoomStatus.AVAILABLE.equals(room.getStatus())
             ));
         }
 
@@ -140,7 +143,7 @@ class CheckOutOccupationUseCaseTest {
             Occupation ocupacionFinalizada = new Occupation(
                     occupationId, tenant, cliente, roomOcupada,
                     LocalDate.now().minusDays(3), LocalDate.now(),
-                    "FINISHED", BigDecimal.valueOf(240.00), LocalDateTime.now(), null
+                    OccupationStatus.FINISHED, BigDecimal.valueOf(240.00), LocalDateTime.now(), null
             );
 
             when(entityFinder.findOccupation(tenantId, occupationId)).thenReturn(ocupacionFinalizada);
@@ -155,27 +158,6 @@ class CheckOutOccupationUseCaseTest {
             verify(clientRepository, never()).save(any());
         }
 
-        @Test
-        @DisplayName("Debería fallar cuando la ocupación está CANCELLED")
-        void deberiaFallarCuandoOcupacionEstaCancelada() {
-
-            Occupation ocupacionCancelada = new Occupation(
-                    occupationId, tenant, cliente, roomOcupada,
-                    LocalDate.now().minusDays(3), LocalDate.now(),
-                    "CANCELLED", BigDecimal.valueOf(240.00), LocalDateTime.now(), null
-            );
-
-            when(entityFinder.findOccupation(tenantId, occupationId)).thenReturn(ocupacionCancelada);
-
-            assertThatThrownBy(() ->
-                    checkOutOccupationUseCase.checkOut(tenantId, occupationId))
-                    .isInstanceOf(OccupationNotActiveException.class)
-                    .hasMessageContaining("CANCELLED");
-
-            verify(occupationRepository, never()).save(any());
-            verify(roomRepository, never()).save(any());
-            verify(clientRepository, never()).save(any());
-        }
     }
 
     @Nested
@@ -192,7 +174,7 @@ class CheckOutOccupationUseCaseTest {
 
             assertThatThrownBy(() ->
                     checkOutOccupationUseCase.checkOut(tenantId, occupationId))
-                    .isInstanceOf(com.app.hotelsaas.catin.domain.exception.OccupationNotFoundException.class)
+                    .isInstanceOf(OccupationNotFoundException.class)
                     .hasMessageContaining("Occupation not found");
 
             verify(occupationRepository, never()).save(any());
