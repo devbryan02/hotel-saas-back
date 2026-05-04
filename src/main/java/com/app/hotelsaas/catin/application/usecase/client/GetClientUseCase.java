@@ -22,20 +22,19 @@ public class GetClientUseCase {
         return clientRepository.findAllByTenantId(tenantId);
     }
 
-    public Client findTenantIdAnId(UUID tenantId, UUID clientId) {
+    public Client findTenantIdAndId(UUID tenantId, UUID clientId) {
         return entityFinder.findClient(tenantId, clientId);
     }
 
     public List<Client> searchByTenantIdAndQuery(UUID tenantId, String query) {
         List<Client> clients = clientRepository.searchByTenantIdAndQuery(tenantId, query);
-        log.info("Clients found: {} query: {}", clients, query);
+        log.info("Clients found: {} query: {}", clients.size(), query);
         return clients;
     }
 
     public List<Client> searchByTenantIdAndQueryAndStatus(UUID tenantId, String query, String status) {
         List<Client> clients = clientRepository.searchByTenantIdAndQueryAndStatus(tenantId, query, status);
-        log.info("Clients found: {} query: {} status: {}", clients, query, status);
+        log.info("Clients found: {} query: {} status: {}", clients.size(), query, status);
         return clients;
     }
-
 }

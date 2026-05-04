@@ -1,6 +1,8 @@
 package com.app.hotelsaas.catin.application.usecase.ocupation;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
+import com.app.hotelsaas.catin.domain.enums.OccupationStatus;
+import com.app.hotelsaas.catin.domain.enums.RoomStatus;
 import com.app.hotelsaas.catin.domain.exception.InvalidOccupationDatesException;
 import com.app.hotelsaas.catin.domain.exception.RoomNotAvailableException;
 import com.app.hotelsaas.catin.domain.model.*;
@@ -67,7 +69,7 @@ class CreateOccupationUseCaseTest {
                 "101",
                 "Simple",
                 BigDecimal.valueOf(80.00),
-                "AVAILABLE"
+                RoomStatus.AVAILABLE
         );
 
         clienteExistente = new Client(
@@ -107,8 +109,8 @@ class CreateOccupationUseCaseTest {
 
             assertThat(result).isNotNull();
             assertThat(result.getTotalPrice()).isEqualByComparingTo(BigDecimal.valueOf(240.00)); // 80 x 3 noches
-            assertThat(result.getStatus()).isEqualTo("ACTIVE");
-            assertThat(result.getRoom().getStatus()).isEqualTo("OCCUPIED");
+            assertThat(result.getStatus()).isEqualTo(OccupationStatus.ACTIVE);
+            assertThat(result.getRoom().getStatus()).isEqualTo(RoomStatus.OCCUPIED);
 
             verify(roomRepository, times(1)).save(any(Room.class));
             verify(occupationRepository, times(1)).save(any(Occupation.class));
@@ -168,7 +170,7 @@ class CreateOccupationUseCaseTest {
         void deberiaFallarCuandoHabitacionEstaOcupada() {
 
             Room roomOcupada = new Room(roomId, tenantExistente, "101", "Simple",
-                    BigDecimal.valueOf(80.00), "OCCUPIED");
+                    BigDecimal.valueOf(80.00), RoomStatus.OCCUPIED);
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);
             when(entityFinder.findRoom(tenantId, roomId)).thenReturn(roomOcupada);
@@ -188,7 +190,7 @@ class CreateOccupationUseCaseTest {
         void deberiaFallarCuandoHabitacionEstaEnMantenimiento() {
 
             Room roomMantenimiento = new Room(roomId, tenantExistente, "101", "Simple",
-                    BigDecimal.valueOf(80.00), "MAINTENANCE");
+                    BigDecimal.valueOf(80.00), RoomStatus.MAINTENANCE);
 
             when(entityFinder.findTenant(tenantId)).thenReturn(tenantExistente);
             when(entityFinder.findRoom(tenantId, roomId)).thenReturn(roomMantenimiento);
