@@ -1,9 +1,12 @@
 package com.app.hotelsaas.catin.application.usecase.room;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
+import com.app.hotelsaas.catin.domain.enums.ActionEnum;
+import com.app.hotelsaas.catin.domain.enums.EntityEnum;
 import com.app.hotelsaas.catin.domain.exception.DuplicateRoomException;
 import com.app.hotelsaas.catin.domain.model.Room;
 import com.app.hotelsaas.catin.domain.port.RoomRepository;
+import com.app.hotelsaas.catin.infrastructure.audit.Auditable;
 import com.app.hotelsaas.catin.web.rest.room.request.UpdateRoomRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -20,6 +23,7 @@ public class UpdateRoomUseCase {
     private final RoomRepository roomRepository;
     private final EntityFinder entityFinder;
 
+    @Auditable(action = ActionEnum.UPDATE, entity = EntityEnum.ROOM)
     public Room execute(UUID tenantId, UUID roomId, UpdateRoomRequest request) {
 
         Room room = entityFinder.findRoom(tenantId, roomId);

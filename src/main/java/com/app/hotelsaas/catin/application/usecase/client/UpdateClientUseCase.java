@@ -1,8 +1,11 @@
 package com.app.hotelsaas.catin.application.usecase.client;
 
+import com.app.hotelsaas.catin.domain.enums.ActionEnum;
+import com.app.hotelsaas.catin.domain.enums.EntityEnum;
 import com.app.hotelsaas.catin.domain.exception.ClientNotFoundException;
 import com.app.hotelsaas.catin.domain.model.Client;
 import com.app.hotelsaas.catin.domain.port.ClientRepository;
+import com.app.hotelsaas.catin.infrastructure.audit.Auditable;
 import com.app.hotelsaas.catin.web.rest.client.request.UpdateClientRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,7 @@ public class UpdateClientUseCase {
      * Updates client with request data; persists changes
      */
     @Transactional
+    @Auditable(action = ActionEnum.UPDATE, entity = EntityEnum.CLIENT)
     public Client execute(UUID tenantId, UUID clientId, UpdateClientRequest request) {
 
         Client client = clientRepository.findByTenantIdAndId(tenantId, clientId)
