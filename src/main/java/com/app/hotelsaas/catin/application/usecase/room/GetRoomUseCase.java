@@ -33,7 +33,7 @@ public class GetRoomUseCase {
                         o -> o
                 ));
 
-        log.info("Active occupations by room id: {}", activeOccupationByRoomId);
+        log.info("Active occupations by room id: {}", activeOccupationByRoomId.get(rooms.getFirst().getId()));
 
         return rooms.stream()
                 .map(room -> new RoomWithOccupation(

@@ -33,7 +33,7 @@ public class CreateOccupationUseCase {
     private final EntityFinder entityFinder;
 
     @Transactional
-    @Auditable(action = ActionEnum.CREATE, entity = EntityEnum.OCCUPATION)
+    @Auditable(action = ActionEnum.CHECK_IN, entity = EntityEnum.OCCUPATION)
     public Occupation execute(UUID tenantId, UUID roomId, UUID clientId, CreateOccupationRequest request) {
 
         // valida que la fecha de check-out sea mayor a la fecha de check-in

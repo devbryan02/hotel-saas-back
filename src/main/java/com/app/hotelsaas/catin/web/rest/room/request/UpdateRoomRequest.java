@@ -20,7 +20,7 @@ public record UpdateRoomRequest(
         @Digits(integer = 4, fraction = 2, message = "Formato inválido: máximo 4 dígitos enteros y 2 decimales")
         Double pricePerNight,
 
-        @NotBlank
+        @NotNull(message = "El estado de la habitación es obligatoria")
         RoomStatus status
 
 ) {

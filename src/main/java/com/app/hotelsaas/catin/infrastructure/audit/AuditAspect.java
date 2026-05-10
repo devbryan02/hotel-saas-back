@@ -30,7 +30,7 @@ public class AuditAspect {
         try {
             AuditLog auditLog = buildAuditLog(auditable, result);
             auditLogRepository.save(auditLog);
-            log.debug("[AUDIT] {} on {} | user: {} | tenant: {}",
+            log.info("[AUDIT] {} on {} | user: {} | tenant: {}",
                     auditLog.getAction(), auditLog.getEntity(),
                     auditLog.getEmail(), auditLog.getTenantId());
         } catch (Exception e) {

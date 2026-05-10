@@ -5,4 +5,6 @@ public enum ActionEnum {
     UPDATE,
     DELETE,
     LOGOUT,
+    CHECK_IN,
+    CHECK_OUT,
 }
