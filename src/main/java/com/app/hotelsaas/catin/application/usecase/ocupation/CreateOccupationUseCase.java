@@ -1,6 +1,8 @@
 package com.app.hotelsaas.catin.application.usecase.ocupation;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
+import com.app.hotelsaas.catin.domain.enums.ActionEnum;
+import com.app.hotelsaas.catin.domain.enums.EntityEnum;
 import com.app.hotelsaas.catin.domain.enums.RoomStatus;
 import com.app.hotelsaas.catin.domain.exception.InvalidOccupationDatesException;
 import com.app.hotelsaas.catin.domain.exception.RoomNotAvailableException;
@@ -10,6 +12,7 @@ import com.app.hotelsaas.catin.domain.model.Room;
 import com.app.hotelsaas.catin.domain.model.Tenant;
 import com.app.hotelsaas.catin.domain.port.OccupationRepository;
 import com.app.hotelsaas.catin.domain.port.RoomRepository;
+import com.app.hotelsaas.catin.infrastructure.audit.Auditable;
 import com.app.hotelsaas.catin.web.rest.ocupation.request.CreateOccupationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,7 @@ public class CreateOccupationUseCase {
     private final EntityFinder entityFinder;
 
     @Transactional
+    @Auditable(action = ActionEnum.CHECK_IN, entity = EntityEnum.OCCUPATION)
     public Occupation execute(UUID tenantId, UUID roomId, UUID clientId, CreateOccupationRequest request) {
 
         // valida que la fecha de check-out sea mayor a la fecha de check-in

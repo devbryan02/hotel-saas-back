@@ -1,6 +1,8 @@
 package com.app.hotelsaas.catin.application.usecase.ocupation;
 
 import com.app.hotelsaas.catin.application.usecase.helpers.EntityFinder;
+import com.app.hotelsaas.catin.domain.enums.ActionEnum;
+import com.app.hotelsaas.catin.domain.enums.EntityEnum;
 import com.app.hotelsaas.catin.domain.enums.OccupationStatus;
 import com.app.hotelsaas.catin.domain.exception.OccupationNotActiveException;
 import com.app.hotelsaas.catin.domain.model.Client;
@@ -9,6 +11,7 @@ import com.app.hotelsaas.catin.domain.model.Room;
 import com.app.hotelsaas.catin.domain.port.ClientRepository;
 import com.app.hotelsaas.catin.domain.port.OccupationRepository;
 import com.app.hotelsaas.catin.domain.port.RoomRepository;
+import com.app.hotelsaas.catin.infrastructure.audit.Auditable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ public class CheckOutOccupationUseCase {
     private final EntityFinder entityFinder;
 
     @Transactional
+    @Auditable(action = ActionEnum.CHECK_OUT, entity = EntityEnum.OCCUPATION)
     public Occupation checkOut(UUID tenantId, UUID occupationId){
 
         Occupation occupation = entityFinder.findOccupation(tenantId, occupationId);
